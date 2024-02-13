@@ -1,2 +1,2 @@
-module.exports = 'CUSTOM_PRIVATE_KEY'
-// module.exports = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwNzgyMTgwNSwiZXhwIjoxNzA3OTA4MjA1fQ.GEnFHwvTXzCGeeI9QevPFij4ZWByT7WdC6BbXZK-GJQ'
+// module.exports = 'CUSTOM_PRIVATE_KEY'
+module.exports = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcwNzg1MTg1OSwiZXhwIjoxNzA3OTM4MjU5fQ.MWGWUu6H20tEFMonGa_g3cQcdTr6ayRR-WU1e8fMfxc'

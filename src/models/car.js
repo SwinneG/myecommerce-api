@@ -65,34 +65,34 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-       /* int_color: {
-            type: DataTypes.STRING,
+        int_color_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
-        transmission: {
-            type: DataTypes.STRING,
+        transmission_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
-        brand: {
-            type: DataTypes.STRING,
+        brand_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
-        model: {
-            type: DataTypes.STRING,
+        model_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
-        state: {
-            type: DataTypes.STRING,
+        state_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
-        chassis: {
-            type: DataTypes.STRING,
+        chassis_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
-        equipment: {
-            type: DataTypes.STRING,
+        equipment_id: {
+            type: DataTypes.INTEGER,
             allowNull: false,
-        }*/
+        }
     }, {
         timestamps: true,
         createdAt: 'created',
@@ -103,6 +103,13 @@ module.exports = (sequelize, DataTypes) => {
     Car.associate = function (models) {
         Car.belongsTo(models.Fuel, { foreignKey: 'fuel_id' });
         Car.belongsTo(models.ExtColor, { foreignKey: 'ext_color_id' });
+        Car.belongsTo(models.IntColor, { foreignKey: 'int_color_id' });
+        Car.belongsTo(models.Transmission, { foreignKey: 'transmission_id' });
+        Car.belongsTo(models.Brand, { foreignKey: 'brand_id' });
+        Car.belongsTo(models.Model, { foreignKey: 'model_id' });
+        Car.belongsTo(models.State, { foreignKey: 'state_id' });
+        Car.belongsTo(models.Chassis, { foreignKey: 'chassis_id' });
+        Car.belongsTo(models.Equipment, { foreignKey: 'equipment_id' });
     }
 
     return Car
