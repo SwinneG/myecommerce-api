@@ -3,9 +3,12 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const sequelize = require('./src/db/sequelize')
 const cors = require('cors')
+const swaggerDocs = require('./swagger.js');
+
 
 const app = express()
 const port = process.env.PORT || 3000
+swaggerDocs(app, port);
 
 app
     // .use(favicon(__dirname + '/favicon.ico'))
@@ -33,3 +36,4 @@ app.use(({res}) => {
 })
 
 app.listen(port, () => console.log(`Notre app Node est démarrée sur: http://localhost:${port}`))
+
