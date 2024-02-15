@@ -1,5 +1,6 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express')
+// const carsRouter = require('./src/routes/cars');
 
 const options = {
     definition: {
@@ -26,7 +27,7 @@ const options = {
     ]
     },
     // looks for configuration in specified directories
-    apis: ['./routes/*.js'],
+    apis: ['./src/routes/*.js'],
 }
 
 const swaggerSpec = swaggerJsdoc(options)
