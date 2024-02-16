@@ -120,7 +120,7 @@ const { Car } = require('../db/sequelize')
  *                      type: integer
  *                      description: The auto-generated id of the model
  *                  name:
- *                      type: integer
+ *                      type: string
  *                      description: The model name
  *          State:
  *              type: object
@@ -227,13 +227,13 @@ router.get('/', /*auth,*/ (req, res) => {
  *            description: The car id
  *      responses:
  *          200:   
- *              description: The book description by id
+ *              description: The car description by id
  *              content: 
  *                  application/json:
  *                      schema: 
  *                         $ref: '#/components/schemas/Car'
  *          404: 
- *              description: the book was not found
+ *              description: the car was not found
  */
 router.get('/:id', /*auth,*/ (req, res) => {
     Car.findByPk(req.params.id)
@@ -262,7 +262,46 @@ router.get('/:id', /*auth,*/ (req, res) => {
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: '#/components/schemas/Car'
+ *                      type: object
+ *                      properties:
+ *                          name:
+ *                              type: string
+ *                          picture:
+ *                              type: string
+ *                          power:
+ *                              type: integer
+ *                          horses:
+ *                              type: integer
+ *                          kms:
+ *                              type: integer
+ *                          first_registration:
+ *                              type: string
+ *                          seating_places:
+ *                              type: integer
+ *                          doors:
+ *                              type: integer
+ *                          co2:
+ *                              type: integer
+ *                          price:
+ *                              type: integer
+ *                          fuel_id:
+ *                              type: integer
+ *                          ext_color_id:
+ *                              type: integer
+ *                          int_color_id:
+ *                              type: integer
+ *                          transmission_id:
+ *                              type: integer
+ *                          brand_id:
+ *                              type: integer
+ *                          model_id:
+ *                              type: integer
+ *                          state_id:
+ *                              type: integer
+ *                          chassis_id:
+ *                              type: integer
+ *                          equipment_id:
+ *                              type: integer
  *      responses:
  *          200:
  *              description: The car was successfully created
@@ -309,7 +348,46 @@ router.post('/', /*auth,*/ (req, res) => {
  *          content:
  *              application/json: 
  *                  schema: 
- *                      $ref: '#/components/schemas/Car'
+ *                      type: object
+ *                      properties:
+ *                          name:
+ *                              type: string
+ *                          picture:
+ *                              type: string
+ *                          power:
+ *                              type: integer
+ *                          horses:
+ *                              type: integer
+ *                          kms:
+ *                              type: integer
+ *                          first_registration:
+ *                              type: string
+ *                          seating_places:
+ *                              type: integer
+ *                          doors:
+ *                              type: integer
+ *                          co2:
+ *                              type: integer
+ *                          price:
+ *                              type: integer
+ *                          fuel_id:
+ *                              type: integer
+ *                          ext_color_id:
+ *                              type: integer
+ *                          int_color_id:
+ *                              type: integer
+ *                          transmission_id:
+ *                              type: integer
+ *                          brand_id:
+ *                              type: integer
+ *                          model_id:
+ *                              type: integer
+ *                          state_id:
+ *                              type: integer
+ *                          chassis_id:
+ *                              type: integer
+ *                          equipment_id:
+ *                              type: integer
  *      responses:
  *          200:
  *              description: The book was updated

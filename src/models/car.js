@@ -101,7 +101,7 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     Car.associate = function (models) {
-        Car.belongsTo(models.Fuel, { foreignKey: 'fuel_id' });
+        Car.belongsTo(models.Fuel, { foreignKey: 'fuel_id '});
         Car.belongsTo(models.ExtColor, { foreignKey: 'ext_color_id' });
         Car.belongsTo(models.IntColor, { foreignKey: 'int_color_id' });
         Car.belongsTo(models.Transmission, { foreignKey: 'transmission_id' });
