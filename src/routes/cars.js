@@ -154,8 +154,26 @@ const { Car } = require('../db/sequelize')
 /**
  * @swagger 
  * tags:
- *      name: Cars
- *      description: The cars managing API
+ *  - name: Cars
+ *    description: The cars requests
+ *  - name: Fuel
+ *    description: The fuel requests
+ *  - name: Exterior color
+ *    description: The exterior color requests
+ *  - name: Interior color
+ *    description: The interior color requests
+ *  - name: Transmission
+ *    description: The transmission requests
+ *  - name: Brand
+ *    description: The brand requests
+ *  - name: Model
+ *    decription: The model requests
+ *  - name: State
+ *    description: The state requests
+ *  - name: Chassis
+ *    description: The chassis requests
+ *  - name: Equipment
+ *    description: The equipment requests
  */
 
 /**
