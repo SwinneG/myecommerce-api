@@ -6,7 +6,6 @@ const auth = require('../auth/auth')
 const { Car } = require('../db/sequelize')
 
 
-
 /**
  * @swagger
  *  components:
@@ -408,13 +407,13 @@ router.post('/', /*auth,*/ (req, res) => {
  *                              type: integer
  *      responses:
  *          200:
- *              description: The book was updated
+ *              description: The car was updated
  *              content:
  *                  application/json:
  *                      schema:
  *                          $ref: '#/components/schemas/Car'
  *          404: 
- *              description: The book was not found
+ *              description: The car was not found
  *          500:
  *              description: Some error happened
  */
@@ -461,9 +460,9 @@ router.put('/:id', /*auth,*/ (req, res) => {
  *            description: The car id
  *      responses:
  *          200:
- *              description: The book was deleted
+ *              description: The car was deleted
  *          404:
- *              description: The book was not found
+ *              description: The car was not found
  */
 router.delete('/:id', /*auth,*/ (req, res) => {
     Car.findByPk(req.params.id).then(car => {  

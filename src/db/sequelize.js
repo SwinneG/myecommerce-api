@@ -12,16 +12,16 @@ const EquipmentModel = require('../models/equipment');
 const CarModel = require('../models/car');
 const UserModel = require('../models/user');
 
-const fuels = require('./mock-fuel');
-const extColors = require('./mock-ext-color');
-const intColors = require('./mock-int-color');
-const transmissions = require('./mock-transmission');
-const brands = require('./mock-brand');
-const models = require('./mock-model');
-const states = require('./mock-state');
-const chassis = require('./mock-chassis');
-const equipments = require('./mock-equipment');
-const cars = require('./mock-cars');
+const fuelMock = require('./mock-fuel');
+const extColorMock = require('./mock-ext-color');
+const intColorMock = require('./mock-int-color');
+const transmissionMock = require('./mock-transmission');
+const brandMock = require('./mock-brand');
+const modelMock = require('./mock-model');
+const stateMock = require('./mock-state');
+const chassisMock = require('./mock-chassis');
+const equipmentMock = require('./mock-equipment');
+const carMock = require('./mock-cars');
 
 const bcrypt = require('bcrypt');
 
@@ -34,78 +34,78 @@ const sequelize = new Sequelize('myecommerce', 'root', '', {
     logging: console.log,
 })
 
-const Fuel = FuelModel(sequelize, DataTypes);
-const ExtColor = ExtColorModel(sequelize, DataTypes);
-const IntColor = IntColorModel(sequelize, DataTypes);
-const Transmission = TransmissionModel(sequelize, DataTypes);
-const Brand = BrandModel(sequelize, DataTypes);
-const Model = ModelModel(sequelize, DataTypes);
-const State = StateModel(sequelize, DataTypes);
-const Chassis = ChassisModel(sequelize, DataTypes);
-const Equipment = EquipmentModel(sequelize, DataTypes);
-const Car = CarModel(sequelize, DataTypes);
-const User = UserModel(sequelize, DataTypes);
+const fuels = FuelModel(sequelize, DataTypes);
+const exteriorColors = ExtColorModel(sequelize, DataTypes);
+const interiorColors = IntColorModel(sequelize, DataTypes);
+const transmissions = TransmissionModel(sequelize, DataTypes);
+const brands = BrandModel(sequelize, DataTypes);
+const models = ModelModel(sequelize, DataTypes);
+const states = StateModel(sequelize, DataTypes);
+const chassis = ChassisModel(sequelize, DataTypes);
+const equipments = EquipmentModel(sequelize, DataTypes);
+const cars = CarModel(sequelize, DataTypes);
+const users = UserModel(sequelize, DataTypes);
 
 const initDb = async () => {
     const _ = await sequelize.sync({ force: true })
 
-    fuels.map(fuel => {
-        Fuel.create({
+    fuelMock.map(fuel => {
+        fuels.create({
             name: fuel.name
         })
     })
 
-    extColors.map(ext_color => {
-        ExtColor.create({
+    extColorMock.map(ext_color => {
+        exteriorColors.create({
             name: ext_color.name,
             type: ext_color.type
         })
     })
 
-    intColors.map(int_color => {
-        IntColor.create({
+    intColorMock.map(int_color => {
+        interiorColors.create({
             name: int_color.name
         })
     })
 
-    transmissions.map(transmission => {
-        Transmission.create({
+    transmissionMock.map(transmission => {
+        transmissions.create({
             name: transmission.name
         })
     })
 
-    brands.map(brand => {
-        Brand.create({
+    brandMock.map(brand => {
+        brands.create({
             name: brand.name
         })
     })
 
-    models.map(model => {
-        Model.create({
+    modelMock.map(model => {
+        models.create({
             name: model.name
         })
     })
 
-    states.map(state => {
-        State.create({
+    stateMock.map(state => {
+        states.create({
             name: state.name
         })
     })
 
-    chassis.map(chassis => {
-        Chassis.create({
-            name: chassis.name
+    chassisMock.map(chassi => {
+        chassis.create({
+            name: chassi.name
         })
     })
 
-    equipments.map(equipment => {
-        Equipment.create({
+    equipmentMock.map(equipment => {
+        equipments.create({
             name: equipment.name
         })
     })
 
-    cars.map(car => {
-        Car.create({
+    carMock.map(car => {
+        cars.create({
             name: car.name,
             picture: car.picture,
             power: car.power,
@@ -131,7 +131,7 @@ const initDb = async () => {
     
     bcrypt.hash('root', 10)
         .then(hash => {
-            User.create({
+            users.create({
                 username: 'root',
                 password: hash
             })
@@ -141,5 +141,5 @@ const initDb = async () => {
 }
 
 module.exports = { 
-    initDb, Fuel, ExtColor, IntColor, Transmission, Brand, Model, State, Chassis, Equipment, Car, User,
+    initDb, fuels, exteriorColors, interiorColors, transmissions, brands, models, states, chassis, equipments, cars, users,
 }
