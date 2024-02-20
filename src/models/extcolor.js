@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const ExtColor =  sequelize.define('ExtColor', {
+    const Extcolor =  sequelize.define('Extcolor', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -14,15 +14,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     }, {
-      timestamps: true,
-      createdAt: 'created',
-      updatedAt: false,
-     // tableName: 'extcolors'
+        timestamps: true,
+        createdAt: 'created',
+        updatedAt: false,
+        tableName: 'extcolors'
     })
 
-    ExtColor.associate = function (models) {
-        ExtColor.hasMany(models.Car);
+    Extcolor.associate = function (models) {
+        Extcolor.hasMany(models.Car);
     }
 
-    return ExtColor
+    return Extcolor
   }

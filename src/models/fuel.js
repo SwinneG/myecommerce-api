@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       createdAt: 'created',
       updatedAt: false,
-     // tableName: 'fuels'
+        tableName: 'fuels'
     })
 
     Fuel.associate = function (models) {

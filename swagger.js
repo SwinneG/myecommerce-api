@@ -1,6 +1,5 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express')
-// const carsRouter = require('./src/routes/cars');
 
 const options = {
     definition: {
@@ -26,17 +25,16 @@ const options = {
         },*/
     ]
     },
-    // looks for configuration in specified directories
-    apis: ['./src/routes/*.js'],
+    apis: ['./src/routes/swagger/*.js'],
 }
 
 const swaggerSpec = swaggerJsdoc(options)
 
 module.exports = function swaggerDocs(app, port) {
     // Swagger Page
-    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     // Documentation in JSON format
-    app.get('/api-docs.json', (req, res) => {
+    app.get('/docs.json', (req, res) => {
         res.setHeader('Content-Type', 'application/json')
         res.send(swaggerSpec)
     })

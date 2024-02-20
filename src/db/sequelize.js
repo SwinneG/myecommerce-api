@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 const FuelModel = require('../models/fuel');
-const ExtColorModel = require('../models/ext_color');
-const IntColorModel = require('../models/int_color');
+const ExtcolorModel = require('../models/extcolor');
+const IntcolorModel = require('../models/intcolor');
 const TransmissionModel = require('../models/transmission');
 const BrandModel = require('../models/brand');
 const ModelModel = require('../models/model');
@@ -12,16 +12,16 @@ const EquipmentModel = require('../models/equipment');
 const CarModel = require('../models/car');
 const UserModel = require('../models/user');
 
-const fuelMock = require('./mock-fuel');
-const extColorMock = require('./mock-ext-color');
-const intColorMock = require('./mock-int-color');
-const transmissionMock = require('./mock-transmission');
-const brandMock = require('./mock-brand');
-const modelMock = require('./mock-model');
-const stateMock = require('./mock-state');
-const chassisMock = require('./mock-chassis');
-const equipmentMock = require('./mock-equipment');
-const carMock = require('./mock-cars');
+const fuelMock = require('./mocks/mock-fuel');
+const extcolorMock = require('./mocks/mock-ext-color');
+const intcolorMock = require('./mocks/mock-int-color');
+const transmissionMock = require('./mocks/mock-transmission');
+const brandMock = require('./mocks/mock-brand');
+const modelMock = require('./mocks/mock-model');
+const stateMock = require('./mocks/mock-state');
+const chassisMock = require('./mocks/mock-chassis');
+const equipmentMock = require('./mocks/mock-equipment');
+const carMock = require('./mocks/mock-cars');
 
 const bcrypt = require('bcrypt');
 
@@ -35,8 +35,8 @@ const sequelize = new Sequelize('myecommerce', 'root', '', {
 })
 
 const fuels = FuelModel(sequelize, DataTypes);
-const exteriorColors = ExtColorModel(sequelize, DataTypes);
-const interiorColors = IntColorModel(sequelize, DataTypes);
+const extcolors = ExtcolorModel(sequelize, DataTypes);
+const intcolors = IntcolorModel(sequelize, DataTypes);
 const transmissions = TransmissionModel(sequelize, DataTypes);
 const brands = BrandModel(sequelize, DataTypes);
 const models = ModelModel(sequelize, DataTypes);
@@ -55,16 +55,16 @@ const initDb = async () => {
         })
     })
 
-    extColorMock.map(ext_color => {
-        exteriorColors.create({
-            name: ext_color.name,
-            type: ext_color.type
+    extcolorMock.map(extcolor => {
+        exteriorcolors.create({
+            name: extcolor.name,
+            type: extcolor.type
         })
     })
 
-    intColorMock.map(int_color => {
-        interiorColors.create({
-            name: int_color.name
+    intcolorMock.map(intcolor => {
+        interiorcolors.create({
+            name: intcolor.name
         })
     })
 
@@ -141,5 +141,5 @@ const initDb = async () => {
 }
 
 module.exports = { 
-    initDb, fuels, exteriorColors, interiorColors, transmissions, brands, models, states, chassis, equipments, cars, users,
+    initDb, fuels, extcolors, intcolors, transmissions, brands, models, states, chassis, equipments, cars, users,
 }

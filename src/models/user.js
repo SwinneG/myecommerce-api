@@ -15,6 +15,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     }
   }, {
-   // tableName: 'users'
+   tableName: 'users'
   })
 }
