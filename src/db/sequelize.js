@@ -56,14 +56,14 @@ const initDb = async () => {
     })
 
     extcolorMock.map(extcolor => {
-        exteriorcolors.create({
+        extcolors.create({
             name: extcolor.name,
             type: extcolor.type
         })
     })
 
     intcolorMock.map(intcolor => {
-        interiorcolors.create({
+        intcolors.create({
             name: intcolor.name
         })
     })
