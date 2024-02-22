@@ -7,7 +7,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "startnet": "set NODE_OPTIONS=--openssl-legacy-provider && netlify-lambda serve src",
-    "buildnet": "set NODE_OPTIONS=--openssl-legacy-provider && netlify-lambda build src"
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && netlify-lambda build src"
   },
   "author": "Swinne Gael",
   "license": "ISC",
