@@ -2,11 +2,10 @@
   "name": "myecommerce-api",
   "version": "1.0.0",
   "description": "Myecommerce.",
-  "main": "app.js",
+  "main": "api.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
-    "startnet": "set NODE_OPTIONS=--openssl-legacy-provider && netlify-lambda serve src",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider && netlify-lambda serve src",
+    "dev": "nodemon api.js",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider && netlify-lambda build src"
   },
   "author": "Swinne Gael",
