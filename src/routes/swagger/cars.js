@@ -16,6 +16,34 @@
  *                              $ref: '#/components/schemas/Cars'
  */
 
+/**
+ * @swagger
+ * /cars/by/page: 
+ *  get:
+ *      summary: Returns the list of all cars by page
+ *      tags: [Cars]
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            description: Number of the page that we want display
+ *          - in: query
+ *            name: size
+ *            schema:
+ *              type: integer
+ *            description: Size limit of cars by page
+ *      responses:
+ *          200:   
+ *              description: The list of the cars by page
+ *              content: 
+ *                  application/json:
+ *                      schema: 
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Cars'
+ */
+
 
 /**
  * @swagger

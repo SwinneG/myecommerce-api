@@ -13,16 +13,68 @@ const getAll = (req, res) => {
         return res.status(404).json({ message });
     }
    
-    Model.findAll()
+    Model.findAndCountAll()
         .then(items => {
+            const status = 200
+            const isSuccess = true
             const message = 'La liste a bien été récupérée.'
-            res.json({ message, data: items })
+            const total = items.count
+            res.json({ isSuccess, status, message, total, results: items })
         })
         .catch(error => {
             const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
-            res.status(500).json({message, data: error})
+            res.status(500).json({message, results: error})
         })
 } 
+
+const getByPage = (req, res) => {
+    const modelName = req.params.modelName;
+    const Model = sequelize[modelName];
+
+    if (!Model) {
+        const message = `Le modèle "${modelName}" n'existe pas.`;
+        return res.status(404).json({ message });
+    }
+
+    const pageAsNumber = Number.parseInt(req.query.page);
+    const sizeAsNumber = Number.parseInt(req.query.size);
+    
+
+    let page = 0;
+    if(!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
+        //-1 sinon ca commence à page=0
+        page = pageAsNumber -1
+    }
+
+    let size = 5;
+    if(!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 ) {
+        size = sizeAsNumber
+    }
+
+    Model.findAndCountAll({
+        order: [
+            ['id', 'DESC']
+        ],
+        limit: size,
+        offset: page*size
+    })
+        .then(items => {
+            const status = 200
+            const isSuccess = true
+            const message = 'La liste a bien été récupérée.'
+            const total = items.count
+            const totalByPage = size
+            const totalPages = Math.ceil(items.count / size)
+            const currentPage = page +1
+            const nextPage = currentPage + 1
+            const previousPage = null
+            res.json({ isSuccess, status, message, total, totalByPage, totalPages, currentPage, nextPage, previousPage, results: items })
+        })
+        .catch(error => {
+            const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
+            res.status(500).json({message, results: error})
+        })
+}
 
 const getById = (req, res) => {
 
@@ -150,6 +202,7 @@ const deleteById = (req, res) => {
   
 module.exports = { 
     getAll, 
+    getByPage,
     getById,
     createId,
     updateId,

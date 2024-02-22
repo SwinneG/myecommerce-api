@@ -23,7 +23,7 @@ app
 app.use('/', myRoutes);
 
 //Initialise la DB avec les mocks (désactivé en prod)
-// sequelize.initDb()
+//sequelize.initDb()
 
 //Gestion des erreurs 404
 app.use(({ res }) => {
