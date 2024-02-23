@@ -69,6 +69,29 @@
  *              description: the car was not found
  */
 
+/**
+* @swagger
+* /cars/search: 
+*  get:
+*      summary: Returns the list of search term
+*      tags: [Cars]
+*      parameters:
+*          - in: query
+*            name: query
+*            schema:
+*              type: string
+*            description: Search query name
+*      responses:
+*          200:   
+*              description: The list of the cars by page
+*              content: 
+*                  application/json:
+*                      schema: 
+*                          type: array
+*                          items:
+*                              $ref: '#/components/schemas/Cars'
+*/
+
 
 /**
  * @swagger
