@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, ValidationError, UniqueConstraintError, Op } = require('sequelize');
 
 const FuelModel = require('../models/fuel');
 const ExtcolorModel = require('../models/extcolor');
@@ -39,6 +39,7 @@ const sequelize = new Sequelize('myecommerce', 'root', '', {
     logging: console.log,
 })
 
+
 const fuels = FuelModel(sequelize, DataTypes);
 const extcolors = ExtcolorModel(sequelize, DataTypes);
 const intcolors = IntcolorModel(sequelize, DataTypes);
@@ -51,31 +52,70 @@ const equipments = EquipmentModel(sequelize, DataTypes);
 const cars = CarModel(sequelize, DataTypes);
 const users = UserModel(sequelize, DataTypes);
 
+sequelize.models.Car = cars;
+sequelize.models.Fuel = fuels;
+
+// Mapping from URL parameters to Sequelize model names
+const modelMapping = {
+    cars: 'Car',
+    fuels: 'Fuel'
+};
+
+//ASSOCIATIONS
 fuels.hasMany(cars, {foreignKey: 'fuelId', as: 'cars'});
 cars.belongsTo(fuels, {foreignKey: 'fuelId', as: "fuels"});
 
-
+//CONTROLLERS
 const getAll = (req, res) => {
-    cars.findAndCountAll({
-        include: 
-        [
-            {
-                model: fuels,
-                as: 'fuels'
-            }
-        ]
-    })
-        .then(items => {
-            const status = 200
-            const isSuccess = true
-            const message = 'La liste a bien été récupérée.'
-            const total = items.count
-            res.json({ isSuccess, status, message, total, results: items })
+
+    const modelNameParam = req.params.modelName; // By example: "cars"
+    const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
+
+    // Check if the model exists in sequelize.models
+    if (!sequelize.models[modelName]) {
+        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
+        return res.status(404).json({ message });
+    }
+
+    // Access the model using the mapped name
+    const Model = sequelize.models[modelName];
+
+    if(modelName === 'Car'){
+        Model.findAndCountAll({
+            include: 
+            [
+                {
+                    model: sequelize.models.Fuel,
+                    as: 'fuels'
+                }
+            ]
         })
-        .catch(error => {
-            const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
-            res.status(500).json({message, results: error})
-        })
+            .then(items => {
+                const status = 200
+                const isSuccess = true
+                const message = 'La liste a bien été récupérée.'
+                const total = items.count
+                res.json({ isSuccess, status, message, total, results: items })
+            })
+            .catch(error => {
+                const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
+                res.status(500).json({message, results: error})
+            })
+    }
+    else {
+        Model.findAndCountAll()
+            .then(items => {
+                const status = 200
+                const isSuccess = true
+                const message = 'La liste a bien été récupérée.'
+                const total = items.count
+                res.json({ isSuccess, status, message, total, results: items })
+            })
+            .catch(error => {
+                const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
+                res.status(500).json({message, results: error})
+            })
+    }
 }
 
 const initDb = async () => {

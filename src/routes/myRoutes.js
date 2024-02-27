@@ -3,7 +3,7 @@ const myControllers = require('../controllers/myControllers');
 const router = Router(); 
 const sequelize = require('../db/sequelize')
    
-router.get('/cars', /*auth,*/ sequelize.getAll);
+router.get('/:modelName', /*auth,*/ sequelize.getAll);
 // router.get('/:modelName', /*auth,*/ myControllers.getAll);
 // router.get('/:modelName/by/page', /*auth,*/ myControllers.getByPage);
 // router.get('/:modelName/search', /*auth,*/ myControllers.searchByPage);
