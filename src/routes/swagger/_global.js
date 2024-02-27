@@ -38,7 +38,7 @@
  *                  price:
  *                      type: integer
  *                      description: The car price
- *                  fuel_id:
+ *                  fuelId:
  *                      $ref: '#/components/schemas/Fuel'
  *                  ext_color_id:
  *                      $ref: '#/components/schemas/ExtColor'
@@ -46,7 +46,7 @@
  *                      $ref: '#/components/schemas/IntColor'
  *                  transmission_id:
  *                      $ref: '#/components/schemas/Transmission'
- *                  brand_id: 
+ *                  brandId: 
  *                      $ref: '#/components/schemas/Brand'
  *                  model_id:
  *                      $ref: '#/components/schemas/Model'

@@ -19,10 +19,10 @@ const options = {
         url: "http://localhost:3000/",
         description: "Local server"
         },
-       /* {
-        url: "",
-        description: "Live server"
-        },*/
+    //    {
+    //     url: "https://myecommerce-api-nodejs.netlify.app/.netlify/functions/api/",
+    //     description: "Live server"
+    //     }
     ]
     },
     apis: ['./src/routes/swagger/*.js'],
@@ -30,7 +30,7 @@ const options = {
 
 const swaggerSpec = swaggerJsdoc(options)
 
-module.exports = function swaggerDocs(app, port) {
+module.exports = function swaggerDocs(app) {
     // Swagger Page
     app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
     // Documentation in JSON format

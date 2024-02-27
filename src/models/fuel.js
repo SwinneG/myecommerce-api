@@ -16,9 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'fuels'
     })
 
-    Fuel.associate = function (models) {
-        Fuel.hasMany(models.Car);
-    }
+    // Fuel.associate = function (models) {
+    //     Fuel.hasMany(models.Car);
+    // }
 
     return Fuel
   }

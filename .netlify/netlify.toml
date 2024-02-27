@@ -1,0 +1,30 @@
+functionsDirectory = "C:\\wamp64\\www\\myEcommerce\\API\\functions"
+functionsDirectoryOrigin = "config-v1"
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\wamp64\\www\\myEcommerce\\API\\dist"
+publishOrigin = "ui"
+command = "npm run build"
+commandOrigin = "config"
+functions = "C:\\wamp64\\www\\myEcommerce\\API\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]

@@ -25,6 +25,11 @@ const carMock = require('./mocks/mock-cars');
 
 const bcrypt = require('bcrypt');
 
+
+// const sequelize = new Sequelize('mysql://17384417-8588-47a7-b00c-58b4c2858698-root:root@psedge.global:3306/myecommerce-api-nodejs', {
+//     dialectModule: require('mysql2'),
+// })
+
 const sequelize = new Sequelize('myecommerce', 'root', '', {
     host: 'localhost',
     dialect: 'mariadb',
@@ -45,6 +50,33 @@ const chassis = ChassisModel(sequelize, DataTypes);
 const equipments = EquipmentModel(sequelize, DataTypes);
 const cars = CarModel(sequelize, DataTypes);
 const users = UserModel(sequelize, DataTypes);
+
+fuels.hasMany(cars, {foreignKey: 'fuelId', as: 'cars'});
+cars.belongsTo(fuels, {foreignKey: 'fuelId', as: "fuels"});
+
+
+const getAll = (req, res) => {
+    cars.findAndCountAll({
+        include: 
+        [
+            {
+                model: fuels,
+                as: 'fuels'
+            }
+        ]
+    })
+        .then(items => {
+            const status = 200
+            const isSuccess = true
+            const message = 'La liste a bien été récupérée.'
+            const total = items.count
+            res.json({ isSuccess, status, message, total, results: items })
+        })
+        .catch(error => {
+            const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
+            res.status(500).json({message, results: error})
+        })
+}
 
 const initDb = async () => {
     const _ = await sequelize.sync({ force: true })
@@ -116,11 +148,11 @@ const initDb = async () => {
             doors: car.doors,
             co2: car.co2,
             price: car.price,
-            fuel_id: car.fuel_id,
+            fuelId: car.fuelId,
             ext_color_id: car.ext_color_id,
             int_color_id: car.int_color_id,
             transmission_id: car.transmission_id,
-            brand_id: car.brand_id,
+            brandId: car.brandId,
             model_id: car.model_id,
             state_id: car.state_id,
             chassis_id: car.chassis_id,
@@ -128,6 +160,12 @@ const initDb = async () => {
         })
         .then(car => console.log(JSON.stringify(car)))
     })
+
+    // users.create({
+    //     username: 'root',
+    //     password: 'root'
+    // })
+    // .then(user => console.log(JSON.stringify(user)))
     
     bcrypt.hash('root', 10)
         .then(hash => {
@@ -141,5 +179,17 @@ const initDb = async () => {
 }
 
 module.exports = { 
-    initDb, fuels, extcolors, intcolors, transmissions, brands, models, states, chassis, equipments, cars, users,
+    initDb, 
+    fuels, 
+    extcolors, 
+    intcolors, 
+    transmissions, 
+    brands, 
+    models, 
+    states, 
+    chassis, 
+    equipments, 
+    cars, 
+    users, 
+    getAll
 }

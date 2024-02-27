@@ -57,42 +57,42 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        fuel_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        ext_color_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        int_color_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        transmission_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        brand_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        model_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        state_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        chassis_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },
-        equipment_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        }
+        // fuel_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // ext_color_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // int_color_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // transmission_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // brand_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // model_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // state_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // chassis_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // },
+        // equipment_id: {
+        //     type: DataTypes.INTEGER,
+        //     allowNull: false,
+        // }
     }, {
         timestamps: true,
         createdAt: 'created',
@@ -100,17 +100,17 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'cars'
     })
 
-    Car.associate = function (models) {
-        Car.belongsTo(models.Fuel, { foreignKey: 'fuel_id '});
-        Car.belongsTo(models.ExtColor, { foreignKey: 'ext_color_id' });
-        Car.belongsTo(models.IntColor, { foreignKey: 'int_color_id' });
-        Car.belongsTo(models.Transmission, { foreignKey: 'transmission_id' });
-        Car.belongsTo(models.Brand, { foreignKey: 'brand_id' });
-        Car.belongsTo(models.Model, { foreignKey: 'model_id' });
-        Car.belongsTo(models.State, { foreignKey: 'state_id' });
-        Car.belongsTo(models.Chassis, { foreignKey: 'chassis_id' });
-        Car.belongsTo(models.Equipment, { foreignKey: 'equipment_id' });
-    }
+    // Car.associate = function (models) {
+    //     Car.belongsTo(models.Fuel, { foreignKey: 'fuel_id '});
+    //     Car.belongsTo(models.ExtColor, { foreignKey: 'ext_color_id' });
+    //     Car.belongsTo(models.IntColor, { foreignKey: 'int_color_id' });
+    //     Car.belongsTo(models.Transmission, { foreignKey: 'transmission_id' });
+    //     Car.belongsTo(models.Brand, { foreignKey: 'brand_id' });
+    //     Car.belongsTo(models.Model, { foreignKey: 'model_id' });
+    //     Car.belongsTo(models.State, { foreignKey: 'state_id' });
+    //     Car.belongsTo(models.Chassis, { foreignKey: 'chassis_id' });
+    //     Car.belongsTo(models.Equipment, { foreignKey: 'equipment_id' });
+    // }
 
     return Car
 }

@@ -1,16 +1,15 @@
 const express = require('express')
-// const serverless = require('serverless-http')
+const serverless = require('serverless-http')
 // const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
-const sequelize = require('./db/sequelize')
+const sequelize = require('../src/db/sequelize')
 const cors = require('cors')
 const swaggerDocs = require('../swagger.js')
-const myRoutes = require('./routes/myRoutes.js'); 
-
+const myRoutes = require('../src/routes/myRoutes.js'); 
 
 //Initialisation du serveur
 const app = express()
-const port = process.env.PORT || 3000
+// const port = process.env.PORT || 3000
 
 //Ajout de la doc API avec Swagger
 swaggerDocs(app);
@@ -22,7 +21,8 @@ app
     .use(cors())
 
 // Routes
-app.use('/', myRoutes)
+app.use('/.netlify/functions/api/', myRoutes)
+// app.use('/', myRoutes);
 
 //Initialise la DB avec les mocks (désactivé en prod)
 // sequelize.initDb()
@@ -34,6 +34,6 @@ app.use(({ res }) => {
 })
 
 //Serveur à écouter
-app.listen(port, () => console.log(`Notre app Node est démarrée sur: http://localhost:${port}`))
+// app.listen(port, () => console.log(`Notre app Node est démarrée sur: http://localhost:${port}`))
 
-// module.exports.handler = serverless(app)
+module.exports.handler = serverless(app)
