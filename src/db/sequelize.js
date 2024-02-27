@@ -80,42 +80,28 @@ const getAll = (req, res) => {
     // Access the model using the mapped name
     const Model = sequelize.models[modelName];
 
-    if(modelName === 'Car'){
-        Model.findAndCountAll({
-            include: 
-            [
-                {
-                    model: sequelize.models.Fuel,
-                    as: 'fuels'
-                }
-            ]
+    const queryOptions = {};
+    if (modelName === 'Car') {
+        queryOptions.include = [
+            {
+                model: sequelize.models.Fuel,
+                as: 'fuels',
+            },
+        ];
+    }
+
+    Model.findAndCountAll(queryOptions)
+        .then(items => {
+            const status = 200
+            const isSuccess = true
+            const message = 'La liste a bien été récupérée.'
+            const total = items.count
+            res.json({ isSuccess, status, message, total, results: items })
         })
-            .then(items => {
-                const status = 200
-                const isSuccess = true
-                const message = 'La liste a bien été récupérée.'
-                const total = items.count
-                res.json({ isSuccess, status, message, total, results: items })
-            })
-            .catch(error => {
-                const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
-                res.status(500).json({message, results: error})
-            })
-    }
-    else {
-        Model.findAndCountAll()
-            .then(items => {
-                const status = 200
-                const isSuccess = true
-                const message = 'La liste a bien été récupérée.'
-                const total = items.count
-                res.json({ isSuccess, status, message, total, results: items })
-            })
-            .catch(error => {
-                const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
-                res.status(500).json({message, results: error})
-            })
-    }
+        .catch(error => {
+            const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
+            res.status(500).json({message, results: error})
+        })
 }
 
 const initDb = async () => {
