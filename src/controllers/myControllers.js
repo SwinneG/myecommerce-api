@@ -1,5 +1,6 @@
 const sequelize = require('../db/sequelize')
 const { ValidationError, UniqueConstraintError, Op } = require('sequelize')
+const { DataTypes } = require('sequelize');
 
 const getAll = (req, res) => {
 
