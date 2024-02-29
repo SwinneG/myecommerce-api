@@ -126,23 +126,23 @@
  *                              type: integer
  *                          price:
  *                              type: integer
- *                          fuel_id:
+ *                          fuelId:
  *                              type: integer
- *                          ext_color_id:
+ *                          extcolorId:
  *                              type: integer
- *                          int_color_id:
+ *                          intcolorId:
  *                              type: integer
- *                          transmission_id:
+ *                          transmissionId:
  *                              type: integer
- *                          brand_id:
+ *                          brandId:
  *                              type: integer
- *                          model_id:
+ *                          modelId:
  *                              type: integer
- *                          state_id:
+ *                          stateId:
  *                              type: integer
- *                          chassis_id:
+ *                          chassisId:
  *                              type: integer
- *                          equipment_id:
+ *                          equipmentId:
  *                              type: integer
  *      responses:
  *          200:
@@ -196,23 +196,23 @@
  *                              type: integer
  *                          price:
  *                              type: integer
- *                          fuel_id:
+ *                          fuelId:
  *                              type: integer
- *                          ext_color_id:
+ *                          extcolorId:
  *                              type: integer
- *                          int_color_id:
+ *                          intcolorId:
  *                              type: integer
- *                          transmission_id:
+ *                          transmissionId:
  *                              type: integer
- *                          brand_id:
+ *                          brandId:
  *                              type: integer
- *                          model_id:
+ *                          modelId:
  *                              type: integer
- *                          state_id:
+ *                          stateId:
  *                              type: integer
- *                          chassis_id:
+ *                          chassisId:
  *                              type: integer
- *                          equipment_id:
+ *                          equipmentId:
  *                              type: integer
  *      responses:
  *          200:

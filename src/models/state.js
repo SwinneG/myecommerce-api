@@ -16,9 +16,5 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'states'
     })
 
-    // State.associate = function (models) {
-    //     State.hasMany(models.Car);
-    // }
-
     return State
   }

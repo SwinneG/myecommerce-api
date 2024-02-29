@@ -16,9 +16,5 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'intcolors'
     })
 
-    // IntColor.associate = function (models) {
-    //     IntColor.hasMany(models.Car);
-    // }
-
     return IntColor
   }

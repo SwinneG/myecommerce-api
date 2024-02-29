@@ -20,9 +20,5 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'extcolors'
     })
 
-    // Extcolor.associate = function (models) {
-    //     Extcolor.hasMany(models.Car);
-    // }
-
     return Extcolor
   }

@@ -1,15 +1,13 @@
-const { Router } = require('express');  
-const myControllers = require('../controllers/myControllers'); 
+const { Router } = require('express');
 const router = Router(); 
 const sequelize = require('../db/sequelize')
    
 router.get('/:modelName', /*auth,*/ sequelize.getAll);
-// router.get('/:modelName', /*auth,*/ myControllers.getAll);
-// router.get('/:modelName/by/page', /*auth,*/ myControllers.getByPage);
-// router.get('/:modelName/search', /*auth,*/ myControllers.searchByPage);
-// router.get('/:modelName/:id', /*auth,*/ myControllers.getById);
-// router.post('/:modelName', /*auth,*/ myControllers.createId);
-// router.put('/:modelName/:id', /*auth,*/ myControllers.updateId);
-// router.delete('/:modelName/:id', /*auth,*/ myControllers.deleteById);
+router.get('/:modelName/by/page', /*auth,*/ sequelize.getByPage);
+router.get('/:modelName/search', /*auth,*/ sequelize.searchByPage);
+router.get('/:modelName/:id', /*auth,*/ sequelize.getById);
+router.post('/:modelName', /*auth,*/ sequelize.createId);
+router.put('/:modelName/:id', /*auth,*/ sequelize.updateId);
+router.delete('/:modelName/:id', /*auth,*/ sequelize.deleteById);
   
 module.exports = router;

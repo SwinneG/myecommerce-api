@@ -40,21 +40,21 @@
  *                      description: The car price
  *                  fuelId:
  *                      $ref: '#/components/schemas/Fuel'
- *                  ext_color_id:
+ *                  extcolorId:
  *                      $ref: '#/components/schemas/ExtColor'
- *                  int_color_id:
+ *                  intcolorId:
  *                      $ref: '#/components/schemas/IntColor'
- *                  transmission_id:
+ *                  transmissionId:
  *                      $ref: '#/components/schemas/Transmission'
  *                  brandId: 
  *                      $ref: '#/components/schemas/Brand'
- *                  model_id:
+ *                  modelId:
  *                      $ref: '#/components/schemas/Model'
- *                  state_id:
+ *                  stateId:
  *                      $ref: '#/components/schemas/State'
- *                  chassis_id:
+ *                  chassisId:
  *                      $ref: '#/components/schemas/Chassis'
- *                  equipment_id:
+ *                  equipmentId:
  *                      $ref: '#/components/schemas/Equipment'
  *          Fuel:
  *              type: object
