@@ -6,6 +6,7 @@ const sequelize = require('./db/sequelize')
 const cors = require('cors')
 const swaggerDocs = require('../swagger.js')
 const myRoutes = require('./routes/myRoutes.js'); 
+require('dotenv').config()
 
 
 //Initialisation du serveur

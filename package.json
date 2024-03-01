@@ -2,7 +2,7 @@
   "name": "myecommerce-api",
   "version": "1.0.0",
   "description": "Myecommerce.",
-  "main": "api.js",
+  "main": "src/api.js",
   "scripts": {
     "dev": "nodemon src/api.js",
     "build": "netlify deploy --prod"
