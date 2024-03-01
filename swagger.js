@@ -19,10 +19,10 @@ const options = {
         url: "http://localhost:3000/",
         description: "Local server"
         },
-    //    {
-    //     url: "https://myecommerce-api-nodejs.netlify.app/.netlify/functions/api/",
-    //     description: "Live server"
-    //     }
+       {
+        url: "https://easy-jade-bull-toga.cyclic.app/",
+        description: "Live server"
+        }
     ]
     },
     apis: ['./src/routes/swagger/*.js'],
