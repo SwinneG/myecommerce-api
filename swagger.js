@@ -15,14 +15,14 @@ const options = {
         version: '1.0.0',
     },
     servers: [
-        // {
-        // url: "http://localhost:3000/",
-        // description: "Local server"
-        // },
-       {
-        url: "https://easy-jade-bull-toga.cyclic.app/",
-        description: "Live server"
-        }
+        {
+        url: "http://localhost:3306/",
+        description: "Local server"
+        },
+    //    {
+    //     url: "https://easy-jade-bull-toga.cyclic.app/",
+    //     description: "Live server"
+    //     }
     ]
     },
     apis: ['./src/routes/swagger/*.js'],
