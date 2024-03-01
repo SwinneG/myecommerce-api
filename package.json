@@ -4,8 +4,8 @@
   "description": "Myecommerce.",
   "main": "src/api.js",
   "scripts": {
-    "dev": "nodemon src/api.js",
-    "build": "npm run build"
+    "start": "node src/api.js",
+    "dev": "nodemon src/api.js"
   },
   "author": "Swinne Gael",
   "license": "ISC",
