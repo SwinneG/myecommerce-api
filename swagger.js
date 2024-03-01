@@ -20,7 +20,7 @@ const options = {
         description: "Local server"
         },
        {
-        url: "https://easy-jade-bull-toga.cyclic.app/",
+        url: "https://easy-jade-bull-toga.cyclic.app:3306/",
         description: "Live server"
         }
     ]
