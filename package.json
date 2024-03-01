@@ -5,7 +5,7 @@
   "main": "src/api.js",
   "scripts": {
     "dev": "nodemon src/api.js",
-    "build": "netlify deploy --prod"
+    "build": "npm run build"
   },
   "author": "Swinne Gael",
   "license": "ISC",
@@ -18,13 +18,10 @@
     "jsonwebtoken": "^9.0.2",
     "mariadb": "^3.2.3",
     "mysql2": "^3.9.1",
-    "netlify-lambda": "^2.0.16",
     "sequelize": "^6.36.0",
-    "serve-favicon": "^2.5.0",
-    "serverless-http": "^3.2.0"
+    "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
-    "netlify-cli": "^17.17.0",
     "nodemon": "^3.0.3",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
