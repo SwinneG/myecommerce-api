@@ -11,7 +11,8 @@ require('dotenv').config()
 
 //Initialisation du serveur
 const app = express()
-const port = process.env.PORT || 3000
+// const port = process.env.PORT || 3000
+const port = process.env.PROD_PORT
 
 //Ajout de la doc API avec Swagger
 swaggerDocs(app);

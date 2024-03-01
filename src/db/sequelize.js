@@ -24,23 +24,23 @@ const equipmentMock = require('./mocks/mock-equipment');
 const carMock = require('./mocks/mock-cars');
 
 const bcrypt = require('bcrypt');
-const { query } = require('express');
 require('dotenv').config()
 
-
-// const sequelize = new Sequelize('mysql://17384417-8588-47a7-b00c-58b4c2858698-root:root@psedge.global:3306/myecommerce-api-nodejs', {
-//     dialectModule: require('mysql2'),
+//DEV
+// const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MySQL_USER, process.env.MYSQL_PASSWORD, {
+//     host: 'localhost',
+//     dialect: 'mariadb',
+//     dialectOptions: {
+//         timezone: 'Etc/GMT-2',
+//     },
+//     logging: console.log,
 // })
-
-const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MySQL_USER, process.env.MYSQL_PASSWORD, {
-    host: 'localhost',
-    dialect: 'mariadb',
-    dialectOptions: {
-        timezone: 'Etc/GMT-2',
-    },
+//PROD
+const sequelize = new Sequelize(process.env.PROD_MYSQL_DB, process.env.PROD_MySQL_USER, process.env.PROD_MYSQL_PASSWORD, {
+    host: 'bkfqu1fzmaz07x4navd8-mysql.services.clever-cloud.com',
+    dialect: 'mysql',
     logging: console.log,
 })
-
 
 const fuels = FuelModel(sequelize, DataTypes);
 const extcolors = ExtcolorModel(sequelize, DataTypes);
