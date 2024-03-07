@@ -111,6 +111,9 @@ cars.belongsTo(chassis, {foreignKey: 'chassisId', as: "chassis"});
 equipments.hasMany(cars, {foreignKey: 'equipmentId', as: 'cars'});
 cars.belongsTo(equipments, {foreignKey: 'equipmentId', as: "equipments"});
 
+brands.hasMany(models, {foreignKey: 'brandId', as: 'brands'});
+models.belongsTo(brands, {foreignKey: 'brandId', as: "models"});
+
 //CONTROLLERS
 const getAll = (req, res) => {
 
@@ -720,7 +723,8 @@ const initDb = async () => {
 
     modelMock.map(model => {
         models.create({
-            name: model.name
+            name: model.name,
+            brandId: model.brandId
         })
     })
 
