@@ -8,10 +8,10 @@ const BrandModel = require('../models/brand');
 const ModelModel = require('../models/model');
 const StateModel = require('../models/state');
 const ChassisModel = require('../models/chassis');
-const EquipmentModel = require('../models/equipment');
-const CarModel = require('../models/car');
-const UserModel = require('../models/user');
 const equipmentCategoryModel = require('../models/equipmentCategory')
+const EquipmentModel = require('../models/equipment');
+const UserModel = require('../models/user');
+const CarModel = require('../models/car');
 
 const fuelMock = require('./mocks/mock-fuel');
 const extcolorMock = require('./mocks/mock-ext-color');
@@ -21,9 +21,10 @@ const brandMock = require('./mocks/mock-brand');
 const modelMock = require('./mocks/mock-model');
 const stateMock = require('./mocks/mock-state');
 const chassisMock = require('./mocks/mock-chassis');
-const equipmentMock = require('./mocks/mock-equipment');
-const carMock = require('./mocks/mock-cars');
 const equipmentCategoryMock = require('./mocks/mock-equipment-category');
+const equipmentMock = require('./mocks/mock-equipment');
+const carMock = require('./mocks/mock-car');
+
 
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
@@ -56,12 +57,12 @@ const brands = BrandModel(sequelize, DataTypes);
 const models = ModelModel(sequelize, DataTypes);
 const states = StateModel(sequelize, DataTypes);
 const chassis = ChassisModel(sequelize, DataTypes);
-const equipments = EquipmentModel(sequelize, DataTypes);
-const cars = CarModel(sequelize, DataTypes);
-const users = UserModel(sequelize, DataTypes);
 const equipmentCategories = equipmentCategoryModel(sequelize, DataTypes);
+const equipments = EquipmentModel(sequelize, DataTypes);
+const users = UserModel(sequelize, DataTypes);
+const cars = CarModel(sequelize, DataTypes);
 
-sequelize.models.Car = cars;
+
 sequelize.models.Fuel = fuels;
 sequelize.models.Extcolor = extcolors;
 sequelize.models.Intcolor = intcolors;
@@ -70,8 +71,10 @@ sequelize.models.Brand = brands;
 sequelize.models.Model = models;
 sequelize.models.State = states;
 sequelize.models.Chassis = chassis;
-sequelize.models.Equipment = equipments;
 sequelize.models.EquipmentCategory = equipmentCategories;
+sequelize.models.Equipment = equipments;
+sequelize.models.User = users;
+sequelize.models.Car = cars;
 
 // Mapping from URL parameters to Sequelize model names
 const modelMapping = {
@@ -85,7 +88,8 @@ const modelMapping = {
     states: 'State',
     chassis: 'Chassis',
     equipments: 'Equipment',
-    equipmentCategories: 'EquipmentCategory'
+    equipmentCategories: 'EquipmentCategory',
+    users: 'User'
 };
 
 //ASSOCIATIONS
@@ -115,6 +119,9 @@ cars.belongsTo(chassis, {foreignKey: 'chassisId', as: "chassis"});
 
 equipments.hasMany(cars, {foreignKey: 'equipmentId', as: 'cars'});
 cars.belongsTo(equipments, {foreignKey: 'equipmentId', as: "equipments"});
+
+users.hasMany(cars, {foreignKey: 'userId', as: 'cars'});
+cars.belongsTo(users, {foreignKey: 'userId', as: "users"});
 
 brands.hasMany(models, {foreignKey: 'brandId', as: 'brands'});
 models.belongsTo(brands, {foreignKey: 'brandId', as: "models"});
@@ -761,10 +768,24 @@ const initDb = async () => {
         })
     })
 
-   
+    const adminPwd = await bcrypt.hash('root', 10)
+    const editorPwd = await bcrypt.hash('jaja', 10)
 
-    carMock.map(car => {
-        cars.create({
+    await users.create({
+        username: 'root',
+        password: adminPwd,
+        role: 'admin'
+    })
+
+    await users.create({
+        username: 'jaja',
+        password: editorPwd,
+        role: 'admin'
+    })
+
+
+    carMock.map(async car => {
+        await cars.create({
             name: car.name,
             pictures: car.pictures,
             power: car.power,
@@ -785,19 +806,11 @@ const initDb = async () => {
             stateId: car.stateId,
             chassisId: car.chassisId,
             equipmentId: car.equipmentId,
+            userId: car.userId,
         })
         .then(car => console.log(JSON.stringify(car)))
     })
-
-    bcrypt.hash('root', 10)
-        .then(hash => {
-            users.create({
-                username: 'root',
-                password: hash,
-                role: 'admin'
-            })
-        })
-        .then(user => console.log(JSON.stringify(user)))
+    
 
     console.log('La base de donnée a bien été initialisée !')
 }

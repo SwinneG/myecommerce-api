@@ -20,6 +20,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
     {
@@ -43,6 +44,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
     {
@@ -66,6 +68,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
     {
@@ -89,6 +92,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
     {
@@ -112,6 +116,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
     {
@@ -135,6 +140,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
     {
@@ -158,6 +164,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
     {
@@ -180,7 +187,8 @@ const car = [
         modelId: 2,
         stateId: 1,
         chassisId: 1,
-        equipmentId: 1, 
+        equipmentId: 1,
+        userId: 2, 
         created: new Date()
     },
     {
@@ -204,6 +212,7 @@ const car = [
         stateId: 1,
         chassisId: 1,
         equipmentId: 1, 
+        userId: 2,
         created: new Date()
     },
    

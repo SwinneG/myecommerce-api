@@ -143,6 +143,17 @@
  *                  name:
  *                      type: string
  *                      description: The equipment name
+ *                  equipmentCategoryId:
+ *                      $ref: '#/components/schemas/EquipmentCategory'
+ *          EquipmentCategory:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                      description: The auto-generated id of the equipment category
+ *                  name:
+ *                      type: string
+ *                      description: The equipment category name
  */
 
 /**
@@ -168,4 +179,6 @@
  *    description: The chassis requests
  *  - name: Equipments
  *    description: The equipments requests
+ *  - name: Equipment Categories
+ *    description: The equipment categories requests
  */

@@ -1,53 +1,53 @@
 
 /**
  * @swagger
- * /equipments: 
+ * /equipmentCategories: 
  *  get:
- *      summary: Returns the list of all equipments
- *      tags: [Equipments]
+ *      summary: Returns the list of all equipment categories
+ *      tags: [EquipmentCategories]
  *      responses:
  *          200:   
- *              description: The list of the equipments
+ *              description: The list of the equipment categories
  *              content: 
  *                  application/json:
  *                      schema: 
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/Equipment'
+ *                              $ref: '#/components/schemas/EquipmentCategory'
  */
 
 
 /**
  * @swagger
- * /equipments/{id}: 
+ * /equipmentCategories/{id}: 
  *  get:
- *      summary: Returns the equipment by id
- *      tags: [Equipments]
+ *      summary: Returns the equipment category by id
+ *      tags: [EquipmentCategories]
  *      parameters: 
  *          - in: path
  *            name: id
  *            schema:
  *              type: integer
  *            required: true
- *            description: The equipment id
+ *            description: The equipment category id
  *      responses:
  *          200:   
- *              description: The equipment description by id
+ *              description: The equipment category description by id
  *              content: 
  *                  application/json:
  *                      schema: 
- *                         $ref: '#/components/schemas/Equipment'
+ *                         $ref: '#/components/schemas/EquipmentCategory'
  *          404: 
- *              description: the equipment was not found
+ *              description: the equipment category was not found
  */
 
 
 /**
  * @swagger
- * /equipments:
+ * /equipmentCategories:
  *   post:
- *      summary: Create a new equipment
- *      tags: [Equipments]
+ *      summary: Create a new equipment category
+ *      tags: [EquipmentCategories]
  *      requestBody:
  *          required: true
  *          content:
@@ -59,11 +59,11 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The equipment was successfully created
+ *              description: The equipment category was successfully created
  *              content: 
  *                  application/json: 
  *                      schema:
- *                          $ref: '#/components/schemas/Equipment'
+ *                          $ref: '#/components/schemas/EquipmentCategory'
  *          500: 
  *              description: Some server error
  */
@@ -71,17 +71,17 @@
 
 /**
  * @swagger
- * /equipments/{id}:
+ * /equipmentCategories/{id}:
  *  put:
- *      summary: Update the equipment by id
- *      tags: [Equipments]
+ *      summary: Update the equipment category by id
+ *      tags: [EquipmentCategories]
  *      parameters:
  *          - in: path
  *            name: id
  *            schema:
  *              type: integer
  *            required: true
- *            description: The equipment id
+ *            description: The equipment category id
  *      requestBody:
  *          required: true
  *          content:
@@ -93,13 +93,13 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The equipment was updated
+ *              description: The equipment category was updated
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Equipment'
+ *                          $ref: '#/components/schemas/EquipmentCategory'
  *          404: 
- *              description: The equipment was not found
+ *              description: The equipment category was not found
  *          500:
  *              description: Some error happened
  */
@@ -108,20 +108,20 @@
 
 /**
  * @swagger
- * /equipments/{id}:
+ * /equipmentCategories/{id}:
  *  delete:
- *      summary: Remove the equipment by id
- *      tags: [Equipments]
+ *      summary: Remove the equipment category by id
+ *      tags: [EquipmentCategories]
  *      parameters: 
  *          - in: path
  *            name: id
  *            schema:
  *              type: integer
  *            required: true
- *            description: The equipment id
+ *            description: The equipment category id
  *      responses:
  *          200:
- *              description: The equipment was deleted
+ *              description: The equipment category was deleted
  *          404:
- *              description: The equipment was not found
+ *              description: The equipment category was not found
  */
