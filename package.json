@@ -4,8 +4,8 @@
   "description": "Myecommerce.",
   "main": "src/api.js",
   "scripts": {
-    "start": "node src/api.js",
-    "dev": "nodemon src/api.js"
+    "start": "cross-env&&set NODE_ENV=prod&&node src/api.js",
+    "dev": "cross-env&&set NODE_ENV=dev&&nodemon src/api.js"
   },
   "author": "Swinne Gael",
   "license": "ISC",
@@ -24,6 +24,7 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^3.0.3"
   }
 }

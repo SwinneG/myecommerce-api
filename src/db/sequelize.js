@@ -24,24 +24,30 @@ const equipmentMock = require('./mocks/mock-equipment');
 const carMock = require('./mocks/mock-cars');
 
 const bcrypt = require('bcrypt');
-require('dotenv').config()
+require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
 
-//DEV
-// const sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MySQL_USER, process.env.MYSQL_PASSWORD, {
-//     host: 'localhost',
-//     dialect: 'mariadb',
-//     dialectOptions: {
-//         timezone: 'Etc/GMT-2',
-//     },
-//     logging: console.log,
-// })
-//PROD
-const sequelize = new Sequelize(process.env.PROD_MYSQL_DB, process.env.PROD_MySQL_USER, process.env.PROD_MYSQL_PASSWORD, {
-    host: 'bkfqu1fzmaz07x4navd8-mysql.services.clever-cloud.com',
-    dialect: 'mysql',
-    logging: console.log,
-})
+// console.log(process.env.NODE_ENV)
 
+let sequelize;
+if(process.env.NODE_ENV === 'dev'){
+    sequelize = new Sequelize('myecommerce', 'root', '', {
+        host: 'localhost',
+        dialect: 'mariadb',
+        dialectOptions: {
+            timezone: 'Etc/GMT-2',
+        },
+        logging: console.log,
+    })
+}
+else {
+    sequelize = new Sequelize(process.env.MYSQL_DB, process.env.MySQL_USER, process.env.MYSQL_PASSWORD, {
+        host: 'bkfqu1fzmaz07x4navd8-mysql.services.clever-cloud.com',
+        dialect: 'mysql',
+        logging: console.log,
+    })
+
+}
+    
 const fuels = FuelModel(sequelize, DataTypes);
 const extcolors = ExtcolorModel(sequelize, DataTypes);
 const intcolors = IntcolorModel(sequelize, DataTypes);
@@ -769,15 +775,15 @@ const initDb = async () => {
     // })
     // .then(user => console.log(JSON.stringify(user)))
     
-    bcrypt.hash('root', 10)
-        .then(hash => {
-            users.create({
-                username: 'root',
-                password: hash
-            })
-        })
-        .then(user => console.log(JSON.stringify(user)))
-    console.log('La base de donnée a bien été initialisée !')
+    // bcrypt.hash('root', 10)
+    //     .then(hash => {
+    //         users.create({
+    //             username: 'root',
+    //             password: hash
+    //         })
+    //     })
+    //     .then(user => console.log(JSON.stringify(user)))
+    // console.log('La base de donnée a bien été initialisée !')
 }
 
 module.exports = { 

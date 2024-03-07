@@ -1,18 +1,17 @@
 const express = require('express')
-// const serverless = require('serverless-http')
 // const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const sequelize = require('./db/sequelize')
 const cors = require('cors')
 const swaggerDocs = require('../swagger.js')
 const myRoutes = require('./routes/myRoutes.js'); 
-require('dotenv').config()
-
+require('dotenv').config({ path: `./.env.dev` })
 
 //Initialisation du serveur
 const app = express()
-// const port = process.env.PORT || 3000
-const port = process.env.PROD_PORT
+
+const port = process.env.PORT
+const url = process.env.URL
 
 //Ajout de la doc API avec Swagger
 swaggerDocs(app);
@@ -36,6 +35,5 @@ app.use(({ res }) => {
 })
 
 //Serveur à écouter
-app.listen(port, () => console.log(`Notre app Node est démarrée sur: http://localhost:${port}`))
+app.listen(port, () => console.log(`Notre app Node est démarrée sur: ${url}:${port}`))
 
-// module.exports.handler = serverless(app)
