@@ -11,6 +11,7 @@ const ChassisModel = require('../models/chassis');
 const EquipmentModel = require('../models/equipment');
 const CarModel = require('../models/car');
 const UserModel = require('../models/user');
+const equipmentCategoryModel = require('../models/equipmentCategory')
 
 const fuelMock = require('./mocks/mock-fuel');
 const extcolorMock = require('./mocks/mock-ext-color');
@@ -22,6 +23,7 @@ const stateMock = require('./mocks/mock-state');
 const chassisMock = require('./mocks/mock-chassis');
 const equipmentMock = require('./mocks/mock-equipment');
 const carMock = require('./mocks/mock-cars');
+const equipmentCategoryMock = require('./mocks/mock-equipment-category');
 
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
@@ -57,6 +59,7 @@ const chassis = ChassisModel(sequelize, DataTypes);
 const equipments = EquipmentModel(sequelize, DataTypes);
 const cars = CarModel(sequelize, DataTypes);
 const users = UserModel(sequelize, DataTypes);
+const equipmentCategories = equipmentCategoryModel(sequelize, DataTypes);
 
 sequelize.models.Car = cars;
 sequelize.models.Fuel = fuels;
@@ -68,6 +71,7 @@ sequelize.models.Model = models;
 sequelize.models.State = states;
 sequelize.models.Chassis = chassis;
 sequelize.models.Equipment = equipments;
+sequelize.models.EquipmentCategory = equipmentCategories;
 
 // Mapping from URL parameters to Sequelize model names
 const modelMapping = {
@@ -81,6 +85,7 @@ const modelMapping = {
     states: 'State',
     chassis: 'Chassis',
     equipments: 'Equipment',
+    equipmentCategories: 'EquipmentCategory'
 };
 
 //ASSOCIATIONS
@@ -113,6 +118,9 @@ cars.belongsTo(equipments, {foreignKey: 'equipmentId', as: "equipments"});
 
 brands.hasMany(models, {foreignKey: 'brandId', as: 'brands'});
 models.belongsTo(brands, {foreignKey: 'brandId', as: "models"});
+
+equipmentCategories.hasMany(equipments, {foreignKey: 'equipmentCategoryId', as: 'equipmentCategories'});
+equipments.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipments"});
 
 //CONTROLLERS
 const getAll = (req, res) => {
@@ -740,11 +748,20 @@ const initDb = async () => {
         })
     })
 
-    equipmentMock.map(equipment => {
-        equipments.create({
-            name: equipment.name
+    equipmentCategoryMock.map(category => {
+        equipmentCategories.create({
+            name: category.name
         })
     })
+
+    equipmentMock.map(equipment => {
+        equipments.create({
+            name: equipment.name,
+            equipmentCategoryId: equipment.equipmentCategoryId
+        })
+    })
+
+   
 
     carMock.map(car => {
         cars.create({
