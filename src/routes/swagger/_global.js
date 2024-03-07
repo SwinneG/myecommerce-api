@@ -11,33 +11,36 @@
  *                  name: 
  *                      type: string
  *                      description: The car name
- *                  picture:
+ *                  pictures:
  *                      type: string
  *                      description: The car picture
  *                  power:
  *                      type: integer
  *                      description: The car power
- *                  horses:
+ *                  nb_horses:
  *                      type: integer
  *                      description: The car horses
- *                  kms:
+ *                  nb_kms:
  *                      type: integer
  *                      description: The car kms
- *                  first_registration:
- *                      type: string
+ *                  first_registration_date:
+ *                      type: date
  *                      description: The car first registration
- *                  seating_places:
+ *                  nb_seating_places:
  *                      type: integer
  *                      description: The car seating places
- *                  doors:
+ *                  nb_doors:
  *                      type: integer
  *                      description: The car doors
  *                  co2:
  *                      type: integer
  *                      description: The car co2
- *                  price:
+ *                  regular_price:
  *                      type: integer
  *                      description: The car price
+ *                  currency:
+ *                      type: string
+ *                      description: The price currency
  *                  fuelId:
  *                      $ref: '#/components/schemas/Fuel'
  *                  extcolorId:

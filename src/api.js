@@ -5,11 +5,10 @@ const sequelize = require('./db/sequelize')
 const cors = require('cors')
 const swaggerDocs = require('../swagger.js')
 const myRoutes = require('./routes/myRoutes.js'); 
-require('dotenv').config({ path: `./.env.dev` })
+require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
 
 //Initialisation du serveur
 const app = express()
-
 const port = process.env.PORT
 const url = process.env.URL
 
@@ -26,7 +25,7 @@ app
 app.use('/', myRoutes)
 
 //Initialise la DB avec les mocks (désactivé en prod)
-// sequelize.initDb()
+sequelize.initDb()
 
 //Gestion des erreurs 404
 app.use(({ res }) => {

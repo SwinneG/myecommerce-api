@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
                 notNull: { msg: 'Le nom est une propriété requise' }
             }
         },
-        picture: {
-            type: DataTypes.STRING,
+        pictures: {
+            type: DataTypes.TEXT,
             allowNull: false,
             validate: {
                 isUrl: { msg: 'Utilisez uniquement une URL valide pour l\'image.' },
@@ -29,23 +29,23 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        horses: {
+        nb_horses: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        kms: {
+        nb_kms: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        first_registration: {
-            type: DataTypes.STRING,
+        first_registration_date: {
+            type: DataTypes.DATEONLY,
             allowNull: false,
         },
-        seating_places: {
+        nb_seating_places: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        doors: {
+        nb_doors: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -53,10 +53,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        price: {
+        regular_price: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        currency: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     }, {
         timestamps: true,
         createdAt: 'created',

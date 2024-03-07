@@ -106,44 +106,7 @@
  *                  schema:
  *                      type: object
  *                      properties:
- *                          name:
- *                              type: string
- *                          picture:
- *                              type: string
- *                          power:
- *                              type: integer
- *                          horses:
- *                              type: integer
- *                          kms:
- *                              type: integer
- *                          first_registration:
- *                              type: string
- *                          seating_places:
- *                              type: integer
- *                          doors:
- *                              type: integer
- *                          co2:
- *                              type: integer
- *                          price:
- *                              type: integer
- *                          fuelId:
- *                              type: integer
- *                          extcolorId:
- *                              type: integer
- *                          intcolorId:
- *                              type: integer
- *                          transmissionId:
- *                              type: integer
- *                          brandId:
- *                              type: integer
- *                          modelId:
- *                              type: integer
- *                          stateId:
- *                              type: integer
- *                          chassisId:
- *                              type: integer
- *                          equipmentId:
- *                              type: integer
+ *                           $ref: '#/components/schemas/Cars'
  *      responses:
  *          200:
  *              description: The car was successfully created
@@ -176,44 +139,7 @@
  *                  schema: 
  *                      type: object
  *                      properties:
- *                          name:
- *                              type: string
- *                          picture:
- *                              type: string
- *                          power:
- *                              type: integer
- *                          horses:
- *                              type: integer
- *                          kms:
- *                              type: integer
- *                          first_registration:
- *                              type: string
- *                          seating_places:
- *                              type: integer
- *                          doors:
- *                              type: integer
- *                          co2:
- *                              type: integer
- *                          price:
- *                              type: integer
- *                          fuelId:
- *                              type: integer
- *                          extcolorId:
- *                              type: integer
- *                          intcolorId:
- *                              type: integer
- *                          transmissionId:
- *                              type: integer
- *                          brandId:
- *                              type: integer
- *                          modelId:
- *                              type: integer
- *                          stateId:
- *                              type: integer
- *                          chassisId:
- *                              type: integer
- *                          equipmentId:
- *                              type: integer
+ *                           $ref: '#/components/schemas/Cars'
  *      responses:
  *          200:
  *              description: The car was updated

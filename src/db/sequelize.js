@@ -26,8 +26,6 @@ const carMock = require('./mocks/mock-cars');
 const bcrypt = require('bcrypt');
 require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
 
-// console.log(process.env.NODE_ENV)
-
 let sequelize;
 if(process.env.NODE_ENV === 'dev'){
     sequelize = new Sequelize('myecommerce', 'root', '', {
@@ -128,7 +126,7 @@ const getAll = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
-    if (modelName === 'Car') {
+    /*if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
@@ -167,7 +165,7 @@ const getAll = (req, res) => {
                 as: 'equipments'
             },
         ];
-    }
+    }*/
 
     Model.findAndCountAll(queryOptions)
         .then(items => {
@@ -212,7 +210,7 @@ const getByPage = (req, res) => {
     }
 
     const queryOptions = {};
-    if (modelName === 'Car') {
+    /*if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
@@ -251,7 +249,7 @@ const getByPage = (req, res) => {
                 as: 'equipments'
             },
         ];
-    }
+    }*/
     queryOptions.order = [
         ['id', 'DESC']
     ]
@@ -306,7 +304,7 @@ const searchByPage = (req, res) => {
     }
 
     const queryOptions = {};
-    if (modelName === 'Car') {
+    /*if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
@@ -345,7 +343,7 @@ const searchByPage = (req, res) => {
                 as: 'equipments'
             },
         ];
-    }
+    }*/
     queryOptions.where = {
         name: { //name = propriété du model
             [Op.like]: `%${query}%` //query = critere de recherche 
@@ -393,7 +391,7 @@ const getById = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
-    if (modelName === 'Car') {
+    /*if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
@@ -432,7 +430,7 @@ const getById = (req, res) => {
                 as: 'equipments'
             },
         ];
-    }
+    }*/
     
     Model.findByPk(req.params.id, queryOptions)
         .then(item => {
@@ -464,7 +462,7 @@ const createId = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
-    if (modelName === 'Car') {
+    /*if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
@@ -503,7 +501,7 @@ const createId = (req, res) => {
                 as: 'equipments'
             },
         ];
-    }
+    }*/
 
     Model.create(req.body, queryOptions)
         .then(item => {
@@ -538,7 +536,7 @@ const updateId = (req, res) => {
     const id = req.params.id
 
     const queryOptions = {};
-    if (modelName === 'Car') {
+    /*if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
@@ -577,7 +575,7 @@ const updateId = (req, res) => {
                 as: 'equipments'
             },
         ];
-    }
+    }*/
     queryOptions.where = {
         id: id
     }
@@ -620,7 +618,7 @@ const deleteById = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
-    if (modelName === 'Car') {
+    /*if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
@@ -659,7 +657,7 @@ const deleteById = (req, res) => {
                 as: 'equipments'
             },
         ];
-    }
+    }*/
  
     Model.findByPk(req.params.id, queryOptions)
         .then(item => {  
@@ -747,19 +745,20 @@ const initDb = async () => {
     carMock.map(car => {
         cars.create({
             name: car.name,
-            picture: car.picture,
+            pictures: car.pictures,
             power: car.power,
-            horses: car.horses,
-            kms: car.kms,
-            first_registration: car.first_registration,
-            seating_places: car.seating_places,
-            doors: car.doors,
+            nb_horses: car.nb_horses,
+            nb_kms: car.nb_kms,
+            first_registration_date: car.first_registration_date,
+            nb_seating_places: car.nb_seating_places,
+            nb_doors: car.nb_doors,
             co2: car.co2,
-            price: car.price,
+            regular_price: car.regular_price,
+            currency: car.currency,
             fuelId: car.fuelId,
             extcolorId: car.extcolorId,
             intcolorId: car.intcolorId,
-            transmission_id: car.transmission_id,
+            transmissionId: car.transmissionId,
             brandId: car.brandId,
             modelId: car.modelId,
             stateId: car.stateId,
@@ -769,21 +768,17 @@ const initDb = async () => {
         .then(car => console.log(JSON.stringify(car)))
     })
 
-    // users.create({
-    //     username: 'root',
-    //     password: 'root'
-    // })
-    // .then(user => console.log(JSON.stringify(user)))
-    
-    // bcrypt.hash('root', 10)
-    //     .then(hash => {
-    //         users.create({
-    //             username: 'root',
-    //             password: hash
-    //         })
-    //     })
-    //     .then(user => console.log(JSON.stringify(user)))
-    // console.log('La base de donnée a bien été initialisée !')
+    bcrypt.hash('root', 10)
+        .then(hash => {
+            users.create({
+                username: 'root',
+                password: hash,
+                role: 'admin'
+            })
+        })
+        .then(user => console.log(JSON.stringify(user)))
+
+    console.log('La base de donnée a bien été initialisée !')
 }
 
 module.exports = { 
