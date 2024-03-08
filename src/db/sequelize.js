@@ -120,6 +120,9 @@ cars.belongsTo(chassis, {foreignKey: 'chassisId', as: "chassis"});
 equipments.hasMany(cars, {foreignKey: 'equipmentId', as: 'cars'});
 cars.belongsTo(equipments, {foreignKey: 'equipmentId', as: "equipments"});
 
+equipmentCategories.hasMany(cars, {foreignKey: 'equipmentCategoryId', as: 'cars'});
+cars.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategories"});
+
 users.hasMany(cars, {foreignKey: 'userId', as: 'cars'});
 cars.belongsTo(users, {foreignKey: 'userId', as: "users"});
 
@@ -131,7 +134,6 @@ equipments.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as
 
 //CONTROLLERS
 const getAll = (req, res) => {
-
     const modelNameParam = req.params.modelName; // By example: "cars"
     const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
 
@@ -142,91 +144,25 @@ const getAll = (req, res) => {
     }
 
     const Model = sequelize.models[modelName];
-
-    const queryOptions = {};
-    /*if (modelName === 'Car') {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Fuel,
-                as: 'fuels',
-            },
-            {
-                model: sequelize.models.Extcolor,
-                as: 'extcolors',
-            },
-            {
-                model: sequelize.models.Intcolor,
-                as: 'intcolors'
-            },
-            {
-                model: sequelize.models.Transmission,
-                as: 'transmissions'
-            },
-            {
-                model: sequelize.models.Brand,
-                as: 'brands'
-            },
-            {
-                model: sequelize.models.Model,
-                as: 'models'
-            },
-            {
-                model: sequelize.models.State,
-                as: 'states'
-            },
-            {
-                model: sequelize.models.Chassis,
-                as: 'chassis'
-            },
-            {
-                model: sequelize.models.Equipment,
-                as: 'equipments'
-            },
-        ];
-    }*/
-
-    Model.findAndCountAll(queryOptions)
-        .then(items => {
-            const status = 200
-            const isSuccess = true
-            const message = 'La liste a bien été récupérée.'
-            const total = items.count
-            res.json({ isSuccess, status, message, total, results: items })
-        })
-        .catch(error => {
-            const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
-            res.status(500).json({message, results: error})
-        })
-}
-
-const getByPage = (req, res) => {
-    const modelNameParam = req.params.modelName; // By example: "cars"
-    const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
-
-    // Check if the model exists in sequelize.models
-    if (!sequelize.models[modelName]) {
-        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
-        return res.status(404).json({ message });
-    }
-
-    const Model = sequelize.models[modelName];
-
 
     const pageAsNumber = Number.parseInt(req.query.page);
+    let page = 0;
+    if(!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
+        //-1 otherwise it starts at page=0
+        page = pageAsNumber -1
+    }
+
     const sizeAsNumber = Number.parseInt(req.query.size);
+    let size = 5;
+    if(!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 ) {
+        size = sizeAsNumber
+    }
+
+    let query=""
+    if(req.query.query) {
+        query = req.query.query
+    }
     
-
-    let page = 0;
-    if(!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
-        //-1 sinon ca commence à page=0
-        page = pageAsNumber -1
-    }
-
-    let size = 5;
-    if(!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 ) {
-        size = sizeAsNumber
-    }
-
     const queryOptions = {};
     /*if (modelName === 'Car') {
         queryOptions.include = [
@@ -268,103 +204,11 @@ const getByPage = (req, res) => {
             },
         ];
     }*/
-    queryOptions.order = [
-        ['id', 'DESC']
-    ]
-    queryOptions.limit = size
-    queryOptions.offset = page*size,
-
-    Model.findAndCountAll(queryOptions)
-        .then(items => {
-            const status = 200
-            const isSuccess = true
-            const message = 'La liste a bien été récupérée.'
-            const total = items.count
-            const totalByPage = size
-            const totalPages = Math.ceil(items.count / size)
-            const currentPage = page +1
-            const nextPage = currentPage + 1
-            const previousPage = null
-            res.json({ isSuccess, status, message, total, totalByPage, totalPages, currentPage, nextPage, previousPage, results: items })
-        })
-        .catch(error => {
-            const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
-            res.status(500).json({message, results: error})
-        })
-  
-}
-
-const searchByPage = (req, res) => {
-    const modelNameParam = req.params.modelName; // By example: "cars"
-    const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
-
-    // Check if the model exists in sequelize.models
-    if (!sequelize.models[modelName]) {
-        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
-        return res.status(404).json({ message });
-    }
-
-    const Model = sequelize.models[modelName];
-
-    const pageAsNumber = Number.parseInt(req.query.page);
-    const sizeAsNumber = Number.parseInt(req.query.size);
-    let query = req.query.query
-
-    let page = 0;
-    if(!Number.isNaN(pageAsNumber) && pageAsNumber > 0) {
-        //-1 sinon ca commence à page=0
-        page = pageAsNumber -1
-    }
-
-    let size = 5;
-    if(!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 ) {
-        size = sizeAsNumber
-    }
-
-    const queryOptions = {};
-    /*if (modelName === 'Car') {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Fuel,
-                as: 'fuels',
-            },
-            {
-                model: sequelize.models.Extcolor,
-                as: 'extcolors',
-            },
-            {
-                model: sequelize.models.Intcolor,
-                as: 'intcolors'
-            },
-            {
-                model: sequelize.models.Transmission,
-                as: 'transmissions'
-            },
-            {
-                model: sequelize.models.Brand,
-                as: 'brands'
-            },
-            {
-                model: sequelize.models.Model,
-                as: 'models'
-            },
-            {
-                model: sequelize.models.State,
-                as: 'states'
-            },
-            {
-                model: sequelize.models.Chassis,
-                as: 'chassis'
-            },
-            {
-                model: sequelize.models.Equipment,
-                as: 'equipments'
-            },
-        ];
-    }*/
-    queryOptions.where = {
-        name: { //name = propriété du model
-            [Op.like]: `%${query}%` //query = critere de recherche 
+    if(query!=""){
+        queryOptions.where = {
+            name: { //name = propriété du model
+                [Op.like]: `%${query}%` //query = critere de recherche 
+            }
         }
     }
     queryOptions.order = [
@@ -381,7 +225,7 @@ const searchByPage = (req, res) => {
             const total = items.count
             const totalByPage = size
             const totalPages = Math.ceil(items.count / size)
-            const currentPage = page  +1
+            const currentPage = page + 1
             const nextPage = currentPage + 1
             const previousPage = null
 
@@ -397,10 +241,9 @@ const searchByPage = (req, res) => {
 
 const getById = (req, res) => {
 
-    const modelNameParam = req.params.modelName; // By example: "cars"
-    const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
+    const modelNameParam = req.params.modelName;
+    const modelName = modelMapping[modelNameParam] || modelNameParam;
 
-    // Check if the model exists in sequelize.models
     if (!sequelize.models[modelName]) {
         const message = `Le modèle "${modelNameParam}" n'existe pas.`;
         return res.status(404).json({ message });
@@ -409,47 +252,7 @@ const getById = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
-    /*if (modelName === 'Car') {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Fuel,
-                as: 'fuels',
-            },
-            {
-                model: sequelize.models.Extcolor,
-                as: 'extcolors',
-            },
-            {
-                model: sequelize.models.Intcolor,
-                as: 'intcolors'
-            },
-            {
-                model: sequelize.models.Transmission,
-                as: 'transmissions'
-            },
-            {
-                model: sequelize.models.Brand,
-                as: 'brands'
-            },
-            {
-                model: sequelize.models.Model,
-                as: 'models'
-            },
-            {
-                model: sequelize.models.State,
-                as: 'states'
-            },
-            {
-                model: sequelize.models.Chassis,
-                as: 'chassis'
-            },
-            {
-                model: sequelize.models.Equipment,
-                as: 'equipments'
-            },
-        ];
-    }*/
-    
+
     Model.findByPk(req.params.id, queryOptions)
         .then(item => {
             if(item === null) {
@@ -468,10 +271,9 @@ const getById = (req, res) => {
 
 const createId = (req, res) => {
 
-    const modelNameParam = req.params.modelName; // By example: "cars"
-    const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
+    const modelNameParam = req.params.modelName;
+    const modelName = modelMapping[modelNameParam] || modelNameParam;
 
-    // Check if the model exists in sequelize.models
     if (!sequelize.models[modelName]) {
         const message = `Le modèle "${modelNameParam}" n'existe pas.`;
         return res.status(404).json({ message });
@@ -480,46 +282,6 @@ const createId = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
-    /*if (modelName === 'Car') {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Fuel,
-                as: 'fuels',
-            },
-            {
-                model: sequelize.models.Extcolor,
-                as: 'extcolors',
-            },
-            {
-                model: sequelize.models.Intcolor,
-                as: 'intcolors'
-            },
-            {
-                model: sequelize.models.Transmission,
-                as: 'transmissions'
-            },
-            {
-                model: sequelize.models.Brand,
-                as: 'brands'
-            },
-            {
-                model: sequelize.models.Model,
-                as: 'models'
-            },
-            {
-                model: sequelize.models.State,
-                as: 'states'
-            },
-            {
-                model: sequelize.models.Chassis,
-                as: 'chassis'
-            },
-            {
-                model: sequelize.models.Equipment,
-                as: 'equipments'
-            },
-        ];
-    }*/
 
     Model.create(req.body, queryOptions)
         .then(item => {
@@ -540,10 +302,9 @@ const createId = (req, res) => {
 
 const updateId = (req, res) => {
     
-    const modelNameParam = req.params.modelName; // By example: "cars"
-    const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
+    const modelNameParam = req.params.modelName;
+    const modelName = modelMapping[modelNameParam] || modelNameParam;
 
-    // Check if the model exists in sequelize.models
     if (!sequelize.models[modelName]) {
         const message = `Le modèle "${modelNameParam}" n'existe pas.`;
         return res.status(404).json({ message });
@@ -554,46 +315,7 @@ const updateId = (req, res) => {
     const id = req.params.id
 
     const queryOptions = {};
-    /*if (modelName === 'Car') {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Fuel,
-                as: 'fuels',
-            },
-            {
-                model: sequelize.models.Extcolor,
-                as: 'extcolors',
-            },
-            {
-                model: sequelize.models.Intcolor,
-                as: 'intcolors'
-            },
-            {
-                model: sequelize.models.Transmission,
-                as: 'transmissions'
-            },
-            {
-                model: sequelize.models.Brand,
-                as: 'brands'
-            },
-            {
-                model: sequelize.models.Model,
-                as: 'models'
-            },
-            {
-                model: sequelize.models.State,
-                as: 'states'
-            },
-            {
-                model: sequelize.models.Chassis,
-                as: 'chassis'
-            },
-            {
-                model: sequelize.models.Equipment,
-                as: 'equipments'
-            },
-        ];
-    }*/
+
     queryOptions.where = {
         id: id
     }
@@ -624,10 +346,9 @@ const updateId = (req, res) => {
 
 const deleteById = (req, res) => {
 
-    const modelNameParam = req.params.modelName; // By example: "cars"
-    const modelName = modelMapping[modelNameParam] || modelNameParam; // By example: "Car"
+    const modelNameParam = req.params.modelName;
+    const modelName = modelMapping[modelNameParam] || modelNameParam;
 
-    // Check if the model exists in sequelize.models
     if (!sequelize.models[modelName]) {
         const message = `Le modèle "${modelNameParam}" n'existe pas.`;
         return res.status(404).json({ message });
@@ -636,47 +357,7 @@ const deleteById = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
-    /*if (modelName === 'Car') {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Fuel,
-                as: 'fuels',
-            },
-            {
-                model: sequelize.models.Extcolor,
-                as: 'extcolors',
-            },
-            {
-                model: sequelize.models.Intcolor,
-                as: 'intcolors'
-            },
-            {
-                model: sequelize.models.Transmission,
-                as: 'transmissions'
-            },
-            {
-                model: sequelize.models.Brand,
-                as: 'brands'
-            },
-            {
-                model: sequelize.models.Model,
-                as: 'models'
-            },
-            {
-                model: sequelize.models.State,
-                as: 'states'
-            },
-            {
-                model: sequelize.models.Chassis,
-                as: 'chassis'
-            },
-            {
-                model: sequelize.models.Equipment,
-                as: 'equipments'
-            },
-        ];
-    }*/
- 
+   
     Model.findByPk(req.params.id, queryOptions)
         .then(item => {  
 
@@ -806,6 +487,7 @@ const initDb = async () => {
             stateId: car.stateId,
             chassisId: car.chassisId,
             equipmentId: car.equipmentId,
+            equipmentCategoryId: car.equipmentCategoryId,
             userId: car.userId,
         })
         .then(car => console.log(JSON.stringify(car)))
@@ -818,8 +500,6 @@ const initDb = async () => {
 module.exports = { 
     initDb,
     getAll,
-    getByPage,
-    searchByPage,
     getById,
     createId,
     updateId,

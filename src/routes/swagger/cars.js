@@ -5,23 +5,6 @@
  *  get:
  *      summary: Returns the list of all cars
  *      tags: [Cars]
- *      responses:
- *          200:   
- *              description: The list of the cars
- *              content: 
- *                  application/json:
- *                      schema: 
- *                          type: array
- *                          items:
- *                              $ref: '#/components/schemas/Cars'
- */
-
-/**
- * @swagger
- * /cars/by/page: 
- *  get:
- *      summary: Returns the list of all cars by page
- *      tags: [Cars]
  *      parameters:
  *          - in: query
  *            name: page
@@ -32,10 +15,15 @@
  *            name: size
  *            schema:
  *              type: integer
- *            description: Size limit of cars by page
+ *            description: Size limit of cars
+ *          - in: query
+ *            name: query
+ *            schema:
+ *              type: string
+ *            description: Search query name
  *      responses:
- *          200:   
- *              description: The list of the cars by page
+ *          200:
+ *              description: The list of the cars
  *              content: 
  *                  application/json:
  *                      schema: 
@@ -68,30 +56,6 @@
  *          404: 
  *              description: the car was not found
  */
-
-/**
-* @swagger
-* /cars/search: 
-*  get:
-*      summary: Returns the list of search term
-*      tags: [Cars]
-*      parameters:
-*          - in: query
-*            name: query
-*            schema:
-*              type: string
-*            description: Search query name
-*      responses:
-*          200:   
-*              description: The list of the cars by page
-*              content: 
-*                  application/json:
-*                      schema: 
-*                          type: array
-*                          items:
-*                              $ref: '#/components/schemas/Cars'
-*/
-
 
 /**
  * @swagger

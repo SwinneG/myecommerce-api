@@ -59,6 +59,8 @@
  *                      $ref: '#/components/schemas/Chassis'
  *                  equipmentId:
  *                      $ref: '#/components/schemas/Equipment'
+ *                  equipmentCategoryId:
+ *                      $ref: '#/components/schemas/EquipmentCategory'
  *          Fuel:
  *              type: object
  *              properties:

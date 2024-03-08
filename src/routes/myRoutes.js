@@ -3,8 +3,6 @@ const router = Router();
 const sequelize = require('../db/sequelize')
    
 router.get('/:modelName', /*auth,*/ sequelize.getAll);
-router.get('/:modelName/by/page', /*auth,*/ sequelize.getByPage);
-router.get('/:modelName/search', /*auth,*/ sequelize.searchByPage);
 router.get('/:modelName/:id', /*auth,*/ sequelize.getById);
 router.post('/:modelName', /*auth,*/ sequelize.createId);
 router.put('/:modelName/:id', /*auth,*/ sequelize.updateId);
