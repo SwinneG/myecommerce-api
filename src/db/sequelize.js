@@ -94,43 +94,43 @@ const modelMapping = {
 
 //ASSOCIATIONS
 fuels.hasMany(cars, {foreignKey: 'fuelId', as: 'cars'});
-cars.belongsTo(fuels, {foreignKey: 'fuelId', as: "fuels"});
+cars.belongsTo(fuels, {foreignKey: 'fuelId', as: "fuel"});
 
 extcolors.hasMany(cars, {foreignKey: 'extcolorId', as: 'cars'});
-cars.belongsTo(extcolors, {foreignKey: 'extcolorId', as: "extcolors"});
+cars.belongsTo(extcolors, {foreignKey: 'extcolorId', as: "extcolor"});
 
 intcolors.hasMany(cars, {foreignKey: 'intcolorId', as: 'cars'});
-cars.belongsTo(intcolors, {foreignKey: 'intcolorId', as: "intcolors"});
+cars.belongsTo(intcolors, {foreignKey: 'intcolorId', as: "intcolor"});
 
 transmissions.hasMany(cars, {foreignKey: 'transmissionId', as: 'cars'});
-cars.belongsTo(transmissions, {foreignKey: 'transmissionId', as: "transmissions"});
+cars.belongsTo(transmissions, {foreignKey: 'transmissionId', as: "transmission"});
 
 brands.hasMany(cars, {foreignKey: 'brandId', as: 'cars'});
-cars.belongsTo(brands, {foreignKey: 'brandId', as: "brands"});
+cars.belongsTo(brands, {foreignKey: 'brandId', as: "brand"});
 
 models.hasMany(cars, {foreignKey: 'modelId', as: 'cars'});
-cars.belongsTo(models, {foreignKey: 'modelId', as: "models"});
+cars.belongsTo(models, {foreignKey: 'modelId', as: "model"});
 
 states.hasMany(cars, {foreignKey: 'stateId', as: 'cars'});
-cars.belongsTo(states, {foreignKey: 'stateId', as: "states"});
+cars.belongsTo(states, {foreignKey: 'stateId', as: "state"});
 
 chassis.hasMany(cars, {foreignKey: 'chassisId', as: 'cars'});
 cars.belongsTo(chassis, {foreignKey: 'chassisId', as: "chassis"});
 
 equipments.hasMany(cars, {foreignKey: 'equipmentId', as: 'cars'});
-cars.belongsTo(equipments, {foreignKey: 'equipmentId', as: "equipments"});
+cars.belongsTo(equipments, {foreignKey: 'equipmentId', as: "equipment"});
 
 equipmentCategories.hasMany(cars, {foreignKey: 'equipmentCategoryId', as: 'cars'});
-cars.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategories"});
+cars.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategory"});
 
 users.hasMany(cars, {foreignKey: 'userId', as: 'cars'});
-cars.belongsTo(users, {foreignKey: 'userId', as: "users"});
+cars.belongsTo(users, {foreignKey: 'userId', as: "user"});
 
-brands.hasMany(models, {foreignKey: 'brandId', as: 'brands'});
-models.belongsTo(brands, {foreignKey: 'brandId', as: "models"});
+brands.hasMany(models, {foreignKey: 'brandId', as: 'model'});
+models.belongsTo(brands, {foreignKey: 'brandId', as: "brand"});
 
-equipmentCategories.hasMany(equipments, {foreignKey: 'equipmentCategoryId', as: 'equipmentCategories'});
-equipments.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipments"});
+equipmentCategories.hasMany(equipments, {foreignKey: 'equipmentCategoryId', as: 'equipment'});
+equipments.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategory"});
 
 //CONTROLLERS
 const getAll = (req, res) => {
@@ -164,35 +164,35 @@ const getAll = (req, res) => {
     }
     
     const queryOptions = {};
-    /*if (modelName === 'Car') {
+    if (modelName === 'Car') {
         queryOptions.include = [
             {
                 model: sequelize.models.Fuel,
-                as: 'fuels',
+                as: 'fuel',
             },
             {
                 model: sequelize.models.Extcolor,
-                as: 'extcolors',
+                as: 'extcolor',
             },
             {
                 model: sequelize.models.Intcolor,
-                as: 'intcolors'
+                as: 'intcolor'
             },
             {
                 model: sequelize.models.Transmission,
-                as: 'transmissions'
+                as: 'transmission'
             },
             {
                 model: sequelize.models.Brand,
-                as: 'brands'
+                as: 'brand'
             },
             {
                 model: sequelize.models.Model,
-                as: 'models'
+                as: 'model'
             },
             {
                 model: sequelize.models.State,
-                as: 'states'
+                as: 'state'
             },
             {
                 model: sequelize.models.Chassis,
@@ -200,10 +200,37 @@ const getAll = (req, res) => {
             },
             {
                 model: sequelize.models.Equipment,
-                as: 'equipments'
+                as: 'equipment'
+            },
+            {
+                model: sequelize.models.EquipmentCategory,
+                as: 'equipmentCategory'
+            },
+            {
+                model: sequelize.models.User,
+                as: 'user'
             },
         ];
-    }*/
+    }
+
+    if(modelName === 'Model') {
+        queryOptions.include = [
+            {
+                model: sequelize.models.Brand,
+                as: 'brand',
+            },
+        ];
+    }
+
+    if(modelName === "Equipment") {
+        queryOptions.include = [
+            {
+                model: sequelize.models.EquipmentCategory,
+                as: 'equipmentCategory'
+            }
+        ]
+    }
+
     if(query!=""){
         queryOptions.where = {
             name: { //name = propriété du model
@@ -235,8 +262,7 @@ const getAll = (req, res) => {
             const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
             res.status(500).json({message, results: error})
         })
-    
-   
+        
 }
 
 const getById = (req, res) => {
