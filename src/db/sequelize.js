@@ -278,6 +278,72 @@ const getById = (req, res) => {
     const Model = sequelize.models[modelName];
 
     const queryOptions = {};
+    if (modelName === 'Car') {
+        queryOptions.include = [
+            {
+                model: sequelize.models.Fuel,
+                as: 'fuel',
+            },
+            {
+                model: sequelize.models.Extcolor,
+                as: 'extcolor',
+            },
+            {
+                model: sequelize.models.Intcolor,
+                as: 'intcolor'
+            },
+            {
+                model: sequelize.models.Transmission,
+                as: 'transmission'
+            },
+            {
+                model: sequelize.models.Brand,
+                as: 'brand'
+            },
+            {
+                model: sequelize.models.Model,
+                as: 'model'
+            },
+            {
+                model: sequelize.models.State,
+                as: 'state'
+            },
+            {
+                model: sequelize.models.Chassis,
+                as: 'chassis'
+            },
+            {
+                model: sequelize.models.Equipment,
+                as: 'equipment'
+            },
+            {
+                model: sequelize.models.EquipmentCategory,
+                as: 'equipmentCategory'
+            },
+            {
+                model: sequelize.models.User,
+                as: 'user'
+            },
+        ];
+    }
+
+    if(modelName === 'Model') {
+        queryOptions.include = [
+            {
+                model: sequelize.models.Brand,
+                as: 'brand',
+            },
+        ];
+    }
+
+    if(modelName === "Equipment") {
+        queryOptions.include = [
+            {
+                model: sequelize.models.EquipmentCategory,
+                as: 'equipmentCategory'
+            }
+        ]
+    }
 
     Model.findByPk(req.params.id, queryOptions)
         .then(item => {
