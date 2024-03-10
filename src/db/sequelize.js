@@ -12,6 +12,7 @@ const equipmentCategoryModel = require('../models/equipmentCategory')
 const EquipmentModel = require('../models/equipment');
 const UserModel = require('../models/user');
 const CarModel = require('../models/car');
+const CarImageModel = require('../models/carImage');
 
 const fuelMock = require('./mocks/mock-fuel');
 const extcolorMock = require('./mocks/mock-ext-color');
@@ -24,6 +25,7 @@ const chassisMock = require('./mocks/mock-chassis');
 const equipmentCategoryMock = require('./mocks/mock-equipment-category');
 const equipmentMock = require('./mocks/mock-equipment');
 const carMock = require('./mocks/mock-car');
+const carImageMock = require('./mocks/mock-car-image');
 
 
 const bcrypt = require('bcrypt');
@@ -48,7 +50,7 @@ else {
     })
 
 }
-    
+
 const fuels = FuelModel(sequelize, DataTypes);
 const extcolors = ExtcolorModel(sequelize, DataTypes);
 const intcolors = IntcolorModel(sequelize, DataTypes);
@@ -61,7 +63,7 @@ const equipmentCategories = equipmentCategoryModel(sequelize, DataTypes);
 const equipments = EquipmentModel(sequelize, DataTypes);
 const users = UserModel(sequelize, DataTypes);
 const cars = CarModel(sequelize, DataTypes);
-
+const carImages = CarImageModel(sequelize, DataTypes);
 
 sequelize.models.Fuel = fuels;
 sequelize.models.Extcolor = extcolors;
@@ -75,6 +77,7 @@ sequelize.models.EquipmentCategory = equipmentCategories;
 sequelize.models.Equipment = equipments;
 sequelize.models.User = users;
 sequelize.models.Car = cars;
+sequelize.models.CarImage = carImages;
 
 // Mapping from URL parameters to Sequelize model names
 const modelMapping = {
@@ -89,7 +92,8 @@ const modelMapping = {
     chassis: 'Chassis',
     equipments: 'Equipment',
     equipmentCategories: 'EquipmentCategory',
-    users: 'User'
+    users: 'User',
+    carImages: 'CarImage',
 };
 
 //ASSOCIATIONS
@@ -131,6 +135,9 @@ models.belongsTo(brands, {foreignKey: 'brandId', as: "brand"});
 
 equipmentCategories.hasMany(equipments, {foreignKey: 'equipmentCategoryId', as: 'equipment'});
 equipments.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategory"});
+
+cars.hasMany(carImages, {foreignKey:'carId', as:'carImage'});
+carImages.belongsTo(cars, {foreignKey:'carId', as:'cars'})
 
 //CONTROLLERS
 const getAll = (req, res) => {
@@ -227,6 +234,15 @@ const getAll = (req, res) => {
             {
                 model: sequelize.models.EquipmentCategory,
                 as: 'equipmentCategory'
+            }
+        ]
+    }
+
+    if(modelName === "CarImage") {
+        queryOptions.include = [
+            {
+                model: sequelize.models.Car,
+                as: 'cars'
             }
         ]
     }
@@ -341,6 +357,15 @@ const getById = (req, res) => {
             {
                 model: sequelize.models.EquipmentCategory,
                 as: 'equipmentCategory'
+            }
+        ]
+    }
+
+    if(modelName === "CarImage") {
+        queryOptions.include = [
+            {
+                model: sequelize.models.Car,
+                as: 'cars'
             }
         ]
     }
@@ -560,7 +585,7 @@ const initDb = async () => {
     carMock.map(async car => {
         await cars.create({
             name: car.name,
-            pictures: car.pictures,
+            //pictures: car.pictures,
             power: car.power,
             nb_horses: car.nb_horses,
             nb_kms: car.nb_kms,
@@ -583,6 +608,13 @@ const initDb = async () => {
             userId: car.userId,
         })
         .then(car => console.log(JSON.stringify(car)))
+    })
+    
+    carImageMock.map(carImage => {
+        carImages.create({
+            image: carImage.image,
+            carId: carImage.carId
+        })
     })
     
 

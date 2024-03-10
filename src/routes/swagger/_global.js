@@ -11,9 +11,6 @@
  *                  name: 
  *                      type: string
  *                      description: The car name
- *                  pictures:
- *                      type: string
- *                      description: The car picture
  *                  power:
  *                      type: integer
  *                      description: The car power
@@ -156,6 +153,15 @@
  *                  name:
  *                      type: string
  *                      description: The equipment category name
+ *          CarImage:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                      description: The auto-generated if of the car images
+ *                  image:
+ *                      type: blob
+ *                      description: The car image blob
  */
 
 /**
@@ -183,4 +189,6 @@
  *    description: The equipments requests
  *  - name: Equipment Categories
  *    description: The equipment categories requests
+ *  - name: Car Images
+ *    description: The car images requests
  */

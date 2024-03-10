@@ -17,14 +17,14 @@ module.exports = (sequelize, DataTypes) => {
                 notNull: { msg: 'Le nom est une propriété requise' }
             }
         },
-        pictures: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-            validate: {
-                isUrl: { msg: 'Utilisez uniquement une URL valide pour l\'image.' },
-                notNull: { msg: 'L\'image est une propriété requise' }
-            }
-        },
+        // pictures: {
+        //     type: DataTypes.TEXT,
+        //     allowNull: false,
+        //     validate: {
+        //         isUrl: { msg: 'Utilisez uniquement une URL valide pour l\'image.' },
+        //         notNull: { msg: 'L\'image est une propriété requise' }
+        //     }
+        // },
         power: {
             type: DataTypes.INTEGER,
             allowNull: false,

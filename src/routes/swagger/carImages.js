@@ -1,53 +1,53 @@
 
 /**
  * @swagger
- * /equipmentCategories: 
+ * /carImages: 
  *  get:
- *      summary: Returns the list of all equipment categories
- *      tags: [Equipment Categories]
+ *      summary: Returns the list of all car images
+ *      tags: [Car Images]
  *      responses:
  *          200:   
- *              description: The list of the equipment categories
+ *              description: The list of the car images
  *              content: 
  *                  application/json:
  *                      schema: 
  *                          type: array
  *                          items:
- *                              $ref: '#/components/schemas/EquipmentCategory'
+ *                              $ref: '#/components/schemas/CarImage'
  */
 
 
 /**
  * @swagger
- * /equipmentCategories/{id}: 
+ * /carImages/{id}: 
  *  get:
- *      summary: Returns the equipment category by id
- *      tags: [Equipment Categories]
+ *      summary: Returns the car image by id
+ *      tags: [Car Images]
  *      parameters: 
  *          - in: path
  *            name: id
  *            schema:
  *              type: integer
  *            required: true
- *            description: The equipment category id
+ *            description: The car image id
  *      responses:
  *          200:   
- *              description: The equipment category description by id
+ *              description: The car image description by id
  *              content: 
  *                  application/json:
  *                      schema: 
- *                         $ref: '#/components/schemas/EquipmentCategory'
+ *                         $ref: '#/components/schemas/CarImage'
  *          404: 
- *              description: the equipment category was not found
+ *              description: the car image was not found
  */
 
 
 /**
  * @swagger
- * /equipmentCategories:
+ * /carImages:
  *   post:
- *      summary: Create a new equipment category
- *      tags: [Equipment Categories]
+ *      summary: Create a new car image
+ *      tags: [Car Images]
  *      requestBody:
  *          required: true
  *          content:
@@ -59,11 +59,11 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The equipment category was successfully created
+ *              description: The car image was successfully created
  *              content: 
  *                  application/json: 
  *                      schema:
- *                          $ref: '#/components/schemas/EquipmentCategory'
+ *                          $ref: '#/components/schemas/CarImage'
  *          500: 
  *              description: Some server error
  */
@@ -71,17 +71,17 @@
 
 /**
  * @swagger
- * /equipmentCategories/{id}:
+ * /carImages/{id}:
  *  put:
- *      summary: Update the equipment category by id
- *      tags: [Equipment Categories]
+ *      summary: Update the car image by id
+ *      tags: [Car Images]
  *      parameters:
  *          - in: path
  *            name: id
  *            schema:
  *              type: integer
  *            required: true
- *            description: The equipment category id
+ *            description: The car image id
  *      requestBody:
  *          required: true
  *          content:
@@ -93,13 +93,13 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The equipment category was updated
+ *              description: The car image was updated
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/EquipmentCategory'
+ *                          $ref: '#/components/schemas/CarImage'
  *          404: 
- *              description: The equipment category was not found
+ *              description: The car image was not found
  *          500:
  *              description: Some error happened
  */
@@ -108,20 +108,20 @@
 
 /**
  * @swagger
- * /equipmentCategories/{id}:
+ * /carImages/{id}:
  *  delete:
- *      summary: Remove the equipment category by id
- *      tags: [Equipment Categories]
+ *      summary: Remove the car image by id
+ *      tags: [Car Images]
  *      parameters: 
  *          - in: path
  *            name: id
  *            schema:
  *              type: integer
  *            required: true
- *            description: The equipment category id
+ *            description: The car image id
  *      responses:
  *          200:
- *              description: The equipment category was deleted
+ *              description: The car image was deleted
  *          404:
- *              description: The equipment category was not found
+ *              description: The car image was not found
  */
