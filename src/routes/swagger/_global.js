@@ -21,7 +21,7 @@
  *                      type: integer
  *                      description: The car kms
  *                  first_registration_date:
- *                      type: date
+ *                      type: string
  *                      description: The car first registration
  *                  nb_seating_places:
  *                      type: integer
@@ -39,25 +39,59 @@
  *                      type: string
  *                      description: The price currency
  *                  fuelId:
+ *                      type: integer
+ *                      description: The foreign key of fuel
+ *                  fuel:
  *                      $ref: '#/components/schemas/Fuel'
  *                  extcolorId:
+ *                      type: integer
+ *                      description: The foreign key of extcolor
+ *                  extcolor:
  *                      $ref: '#/components/schemas/ExtColor'
  *                  intcolorId:
+ *                      type: integer
+ *                      description: The foreign key of intcolor
+ *                  intcolor:
  *                      $ref: '#/components/schemas/IntColor'
  *                  transmissionId:
+ *                      type: integer
+ *                      description: The foreign key of transmission
+ *                  transmission:
  *                      $ref: '#/components/schemas/Transmission'
  *                  brandId: 
+ *                      type: integer
+ *                      description: The foreign key of brand
+ *                  brand:
  *                      $ref: '#/components/schemas/Brand'
  *                  modelId:
+ *                      type: integer
+ *                      description: The foreign key of model
+ *                  model:
  *                      $ref: '#/components/schemas/Model'
  *                  stateId:
+ *                      type: integer
+ *                      description: The foreign key of state
+ *                  state:
  *                      $ref: '#/components/schemas/State'
  *                  chassisId:
+ *                      type: integer
+ *                      description: The foreign key of chassis
+ *                  chassis:
  *                      $ref: '#/components/schemas/Chassis'
  *                  equipmentId:
+ *                      type: integer
+ *                      description: The foreign key of equipment
+ *                  equipment:
  *                      $ref: '#/components/schemas/Equipment'
  *                  equipmentCategoryId:
+ *                      type: integer
+ *                      description: The foreign key of equipment category
+ *                  equipmentCategory:
  *                      $ref: '#/components/schemas/EquipmentCategory'
+ *                  carImages:
+ *                      type: array
+ *                      items:
+ *                          $ref: '#/components/schemas/CarImage'
  *          Fuel:
  *              type: object
  *              properties:
@@ -160,8 +194,18 @@
  *                      type: integer
  *                      description: The auto-generated if of the car images
  *                  image:
- *                      type: blob
- *                      description: The car image blob
+ *                      type: object
+ *                      properties:
+ *                          type:
+ *                              type: string
+ *                              description: The type of blob
+ *                          data:
+ *                              type: string
+ *                              format: binary
+ *                              description: The blob
+ *                  carId:
+ *                      type: integer
+ *                      description: The foreign key of car
  */
 
 /**

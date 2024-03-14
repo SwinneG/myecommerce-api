@@ -1,4 +1,6 @@
 
+const Car = require('./car');
+
 module.exports = (sequelize, DataTypes) => {
     const carImage = sequelize.define('CarImage', {
         id: {
@@ -14,6 +16,14 @@ module.exports = (sequelize, DataTypes) => {
                 notNull: { msg: 'Le nom est une propriété requise' }
             }
         },
+        //not mandatory
+        // carId: {
+        //     type: DataTypes.INTEGER,
+        //     references: {
+        //         model: 'cars', 
+        //         key: "id"
+        //     }
+        // }
     }, {
         timestamps: true,
         createdAt: 'created',

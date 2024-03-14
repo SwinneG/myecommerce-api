@@ -136,7 +136,7 @@ models.belongsTo(brands, {foreignKey: 'brandId', as: "brand"});
 equipmentCategories.hasMany(equipments, {foreignKey: 'equipmentCategoryId', as: 'equipment'});
 equipments.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategory"});
 
-cars.hasMany(carImages, {foreignKey:'carId', as:'carImage'});
+cars.hasMany(carImages, {foreignKey:'carId', as:'carImages'});
 carImages.belongsTo(cars, {foreignKey:'carId', as:'cars'})
 
 //CONTROLLERS
@@ -217,6 +217,10 @@ const getAll = (req, res) => {
                 model: sequelize.models.User,
                 as: 'user'
             },
+            {
+                model: sequelize.models.CarImage,
+                as: 'carImages'
+            }
         ];
     }
 
@@ -238,14 +242,14 @@ const getAll = (req, res) => {
         ]
     }
 
-    if(modelName === "CarImage") {
+   /* if(modelName === "CarImage") {
         queryOptions.include = [
             {
                 model: sequelize.models.Car,
                 as: 'cars'
             }
         ]
-    }
+    }*/
 
     if(query!=""){
         queryOptions.where = {
@@ -276,6 +280,7 @@ const getAll = (req, res) => {
         })
         .catch(error => {
             const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
+            console.error(error.message)
             res.status(500).json({message, results: error})
         })
         
@@ -340,6 +345,10 @@ const getById = (req, res) => {
                 model: sequelize.models.User,
                 as: 'user'
             },
+            {
+                model: sequelize.models.CarImage,
+                as: 'carImages'
+            }
         ];
     }
 
@@ -418,6 +427,8 @@ const createId = (req, res) => {
 }
 
 const updateId = (req, res) => {
+
+    console.log(req)
     
     const modelNameParam = req.params.modelName;
     const modelName = modelMapping[modelNameParam] || modelNameParam;
@@ -439,11 +450,12 @@ const updateId = (req, res) => {
 
     Model.update(req.body, queryOptions)
         .then(_ => {
-            return Model.findByPk(id).then(item => {
+            return  Model.findByPk(id).then(item => {
                 if(item === null){
                     const message = `L'élément demandé n'existe pas. Rééssayez avec un autre identifiant`
                     return res.status(404).json({message})
                 }
+
                 const message = `L'élément' ${item.name} a bien été modifié.`
                 res.json({message, data: item })
             })

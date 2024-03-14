@@ -6,7 +6,10 @@ const carImage = [
         image: buffer,
         carId: 1
     },
-
+    {
+        image: buffer,
+        carId: 2
+    },
     {
         image: buffer,
         carId: 2

@@ -103,7 +103,69 @@
  *                  schema: 
  *                      type: object
  *                      properties:
- *                           $ref: '#/components/schemas/Cars'
+ *                          id:
+ *                              type: integer
+ *                              description: The id of the car
+ *                          name:
+ *                              type: string
+ *                              description: The name of the car
+ *                          power:
+ *                              type: integer
+ *                              description: The power of the car
+ *                          nb_horses:
+ *                              type: integer
+ *                              description: The horses'number of the car
+ *                          first_registration_date:
+ *                              type: string
+ *                              description: The date of the first registration of the car
+ *                          nb_seating_places:
+ *                              type: integer
+ *                              description: The number of seating places of the car
+ *                          nb_doors:
+ *                              type: integer
+ *                              description: The number of doors of the car
+ *                          co2:
+ *                              type: integer
+ *                              description: The number of CO2
+ *                          regular_price:
+ *                              type: integer
+ *                              description: The regular price of the car
+ *                          currency:
+ *                              type: string
+ *                              description: The currency
+ *                          fuelId:
+ *                              type: integer
+ *                              description: The foreign key of fuel
+ *                          extcolorId:
+ *                              type: integer
+ *                              description: The foreign key of extcolor
+ *                          intcolorId:
+ *                              type: integer
+ *                              description: The foreign key of intcolor
+ *                          transmissionId:
+ *                              type: integer
+ *                              description: The foreign key of transmission
+ *                          brandId:
+ *                              type: integer
+ *                              description: The foreign key of brand
+ *                          modelId:
+ *                              type: integer
+ *                              description: The foreign key of model
+ *                          stateId:
+ *                              type: integer
+ *                              description: The foreign key of state
+ *                          chassisId:
+ *                              type: integer
+ *                              description: The foreign key of chassis
+ *                          equipmentId:
+ *                              type: integer
+ *                              description: The foreign key of equipment
+ *                          equipmentCategoryId:
+ *                              type: integer
+ *                              description: The foreign key of equipmentCategory
+ *                          userId:
+ *                              type: integer
+ *                              description: The foreign key of user
  *      responses:
  *          200:
  *              description: The car was updated
