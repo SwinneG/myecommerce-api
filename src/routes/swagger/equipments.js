@@ -5,15 +5,38 @@
  *  get:
  *      summary: Returns the list of all equipments
  *      tags: [Equipments]
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            description: Number of the page that we want display
+ *            required: false
+ *          - in: query
+ *            name: size
+ *            schema:
+ *              type: integer
+ *            description: Size limit of equipments
+ *            required: false
+ *          - in: query
+ *            name: query
+ *            schema:
+ *              type: string
+ *            description: Search query name
+ *            required: false
  *      responses:
  *          200:   
- *              description: The list of the equipments
+ *              description: The equipments list has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/Equipment'
+ *          404:
+ *              description: The equipments list was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -32,13 +55,15 @@
  *            description: The equipment id
  *      responses:
  *          200:   
- *              description: The equipment description by id
+ *              description: The equipment has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                         $ref: '#/components/schemas/Equipment'
  *          404: 
- *              description: the equipment was not found
+ *              description: The equipment was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -64,6 +89,8 @@
  *                  application/json: 
  *                      schema:
  *                          $ref: '#/components/schemas/Equipment'
+ *          404:
+ *              description: The equipment was not found
  *          500: 
  *              description: Some server error
  */
@@ -93,7 +120,7 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The equipment was updated
+ *              description: The equipment was successfully updated
  *              content:
  *                  application/json:
  *                      schema:
@@ -101,7 +128,7 @@
  *          404: 
  *              description: The equipment was not found
  *          500:
- *              description: Some error happened
+ *              description: Some server error
  */
 
 
@@ -121,7 +148,9 @@
  *            description: The equipment id
  *      responses:
  *          200:
- *              description: The equipment was deleted
+ *              description: The equipment was successfully deleted
  *          404:
  *              description: The equipment was not found
+ *          500:
+ *              description: Some server error
  */

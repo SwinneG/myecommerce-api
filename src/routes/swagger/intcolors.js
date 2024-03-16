@@ -5,15 +5,38 @@
  *  get:
  *      summary: Returns the list of all interior colors
  *      tags: [Interior colors]
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            description: Number of the page that we want display
+ *            required: false
+ *          - in: query
+ *            name: size
+ *            schema:
+ *              type: integer
+ *            description: Size limit of interior colors
+ *            required: false
+ *          - in: query
+ *            name: query
+ *            schema:
+ *              type: string
+ *            description: Search query name
+ *            required: false
  *      responses:
  *          200:   
- *              description: The list of the interior colors
+ *              description: The interior colors list has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/IntColor'
+ *          404:
+ *              description: The interior colors list was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -32,13 +55,15 @@
  *            description: The interior color id
  *      responses:
  *          200:   
- *              description: The interior color description by id
+ *              description: The interior color has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                         $ref: '#/components/schemas/IntColor'
  *          404: 
- *              description: the interior color was not found
+ *              description: The interior color was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -64,6 +89,8 @@
  *                  application/json: 
  *                      schema:
  *                          $ref: '#/components/schemas/IntColor'
+ *          404:
+ *              description: The interior color was not found
  *          500: 
  *              description: Some server error
  */
@@ -93,7 +120,7 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The interior color was updated
+ *              description: The interior color was successfully updated
  *              content:
  *                  application/json:
  *                      schema:
@@ -101,7 +128,7 @@
  *          404: 
  *              description: The interior color was not found
  *          500:
- *              description: Some error happened
+ *              description: Some server error
  */
 
 
@@ -121,7 +148,9 @@
  *            description: The interior color id
  *      responses:
  *          200:
- *              description: The interior color was deleted
+ *              description: The interior color was successfully deleted
  *          404:
  *              description: The interior color was not found
+ *          500:
+ *              description: Some server error
  */

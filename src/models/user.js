@@ -15,12 +15,17 @@ module.exports = (sequelize, DataTypes) => {
     }
     },
     password: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     role: {
-      type: DataTypes.ENUM('admin','editor')
+      type: DataTypes.ENUM('admin','editor'),
+      allowNull: false
     }
   }, {
+   timestamps: true,
+   createdAt: 'created',
+   updatedAt: false,
    tableName: 'users'
   })
 }

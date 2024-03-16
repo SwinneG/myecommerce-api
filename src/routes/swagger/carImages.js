@@ -5,15 +5,38 @@
  *  get:
  *      summary: Returns the list of all car images
  *      tags: [Car Images]
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            description: Number of the page that we want display
+ *            required: false
+ *          - in: query
+ *            name: size
+ *            schema:
+ *              type: integer
+ *            description: Size limit of car images
+ *            required: false
+ *          - in: query
+ *            name: query
+ *            schema:
+ *              type: string
+ *            description: Search query name
+ *            required: false
  *      responses:
  *          200:   
- *              description: The list of the car images
+ *              description: The car images list has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/CarImage'
+ *          404:
+ *              description: The car images list was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -32,13 +55,15 @@
  *            description: The car image id
  *      responses:
  *          200:   
- *              description: The car image description by id
+ *              description: The car image has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                         $ref: '#/components/schemas/CarImage'
  *          404: 
- *              description: the car image was not found
+ *              description: The car image was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -64,6 +89,8 @@
  *                  application/json: 
  *                      schema:
  *                          $ref: '#/components/schemas/CarImage'
+ *          404:
+ *              description: The car image was not found
  *          500: 
  *              description: Some server error
  */
@@ -93,7 +120,7 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The car image was updated
+ *              description: The car image was successfully updated
  *              content:
  *                  application/json:
  *                      schema:
@@ -101,7 +128,7 @@
  *          404: 
  *              description: The car image was not found
  *          500:
- *              description: Some error happened
+ *              description: Some server error
  */
 
 
@@ -121,7 +148,9 @@
  *            description: The car image id
  *      responses:
  *          200:
- *              description: The car image was deleted
+ *              description: The car image was successfully deleted
  *          404:
  *              description: The car image was not found
+ *          500:
+ *              description: Some server error
  */

@@ -5,15 +5,38 @@
  *  get:
  *      summary: Returns the list of all transmissions
  *      tags: [Transmissions]
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            description: Number of the page that we want display
+ *            required: false
+ *          - in: query
+ *            name: size
+ *            schema:
+ *              type: integer
+ *            description: Size limit of transmissions
+ *            required: false
+ *          - in: query
+ *            name: query
+ *            schema:
+ *              type: string
+ *            description: Search query name
+ *            required: false
  *      responses:
  *          200:   
- *              description: The list of the transmissions
+ *              description: The transmissions list has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/Transmissions'
+ *          404:
+ *              description: The transmissions list was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -32,13 +55,15 @@
  *            description: The transmissions id
  *      responses:
  *          200:   
- *              description: The transmission description by id
+ *              description: The transmission has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                         $ref: '#/components/schemas/Transmissions'
  *          404: 
- *              description: the transmission was not found
+ *              description: The transmission was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -66,6 +91,8 @@
  *                  application/json: 
  *                      schema:
  *                          $ref: '#/components/schemas/Transmissions'
+ *          404:
+ *              description: The transmission was not found
  *          500: 
  *              description: Some server error
  */
@@ -97,7 +124,7 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The transmission was updated
+ *              description: The transmission was successfully updated
  *              content:
  *                  application/json:
  *                      schema:
@@ -105,7 +132,7 @@
  *          404: 
  *              description: The transmission was not found
  *          500:
- *              description: Some error happened
+ *              description: Some server error
  */
 
 
@@ -125,7 +152,9 @@
  *            description: The transmission id
  *      responses:
  *          200:
- *              description: The transmission was deleted
+ *              description: The transmission was successfully deleted
  *          404:
  *              description: The transmission was not found
+ *          500:
+ *              description: Some server error
  */

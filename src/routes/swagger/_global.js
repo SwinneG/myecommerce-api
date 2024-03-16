@@ -88,6 +88,11 @@
  *                      description: The foreign key of equipment category
  *                  equipmentCategory:
  *                      $ref: '#/components/schemas/EquipmentCategory'
+ *                  userId:
+ *                      type: integer
+ *                      description: The foreign key of user
+ *                  user:
+ *                      $ref: '#/components/schemas/User'
  *                  carImages:
  *                      type: array
  *                      items:
@@ -187,6 +192,22 @@
  *                  name:
  *                      type: string
  *                      description: The equipment category name
+ *          User:
+ *              type: object
+ *              properties:
+ *                  id:
+ *                      type: integer
+ *                      description: The auto-generated id of the user
+ *                  username:
+ *                      type: string
+ *                      description: The user username
+ *                  password:
+ *                      type: string
+ *                      description: The user password
+ *                  role:
+ *                      type: string
+ *                      enum: [admin, editor]
+ *                      description: The user role
  *          CarImage:
  *              type: object
  *              properties:
@@ -235,4 +256,6 @@
  *    description: The equipment categories requests
  *  - name: Car Images
  *    description: The car images requests
+ *  - name: Users
+ *    description: The users requests
  */

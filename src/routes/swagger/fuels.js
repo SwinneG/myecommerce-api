@@ -5,15 +5,38 @@
  *  get:
  *      summary: Returns the list of all fuels
  *      tags: [Fuels]
+ *      parameters:
+ *          - in: query
+ *            name: page
+ *            schema:
+ *              type: integer
+ *            description: Number of the page that we want display
+ *            required: false
+ *          - in: query
+ *            name: size
+ *            schema:
+ *              type: integer
+ *            description: Size limit of fuels
+ *            required: false
+ *          - in: query
+ *            name: query
+ *            schema:
+ *              type: string
+ *            description: Search query name
+ *            required: false
  *      responses:
  *          200:   
- *              description: The list of the fuel
+ *              description: The fuels list has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/Fuel'
+ *          404:
+ *              description: The fuels list was not found
+ *          500:
+ *              description: Some server error
  */
 
 
@@ -32,13 +55,15 @@
  *            description: The fuel id
  *      responses:
  *          200:   
- *              description: The fuel description by id
+ *              description: The fuel has been loaded successfully
  *              content: 
  *                  application/json:
  *                      schema: 
  *                         $ref: '#/components/schemas/Fuel'
  *          404: 
- *              description: the fuel was not found
+ *              description: The fuel was not found
+ *          500:
+ *              description: Some server error
  */
 
 /**
@@ -63,6 +88,8 @@
  *                  application/json: 
  *                      schema:
  *                          $ref: '#/components/schemas/Fuel'
+ *          404:
+ *              description: The fuel was not found
  *          500: 
  *              description: Some server error
  */
@@ -92,7 +119,7 @@
  *                              type: string
  *      responses:
  *          200:
- *              description: The fuel was updated
+ *              description: The fuel was successfully updated
  *              content:
  *                  application/json:
  *                      schema:
@@ -100,7 +127,7 @@
  *          404: 
  *              description: The fuel was not found
  *          500:
- *              description: Some error happened
+ *              description: Some server error
  */
 
 
@@ -119,7 +146,9 @@
  *            description: The fuel id
  *      responses:
  *          200:
- *              description: The fuel was deleted
+ *              description: The fuel was successfully deleted
  *          404:
  *              description: The fuel was not found
+ *          500:
+ *              description: Some server error
  */
