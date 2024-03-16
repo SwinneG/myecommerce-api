@@ -27,9 +27,10 @@ const equipmentMock = require('./mocks/mock-equipment');
 const carMock = require('./mocks/mock-car');
 const carImageMock = require('./mocks/mock-car-image');
 
-
 const bcrypt = require('bcrypt');
+
 require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
+
 
 let sequelize;
 if(process.env.NODE_ENV === 'dev'){
@@ -146,7 +147,7 @@ const getAll = (req, res) => {
 
     // Check if the model exists in sequelize.models
     if (!sequelize.models[modelName]) {
-        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
+        const message = `Model "${modelNameParam}" does not exist.`;
         return res.status(404).json({ message });
     }
 
@@ -161,8 +162,13 @@ const getAll = (req, res) => {
 
     const sizeAsNumber = Number.parseInt(req.query.size);
     let size = 5;
-    if(!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 ) {
+    let isUnlimited = false;
+    if(!Number.isNaN(sizeAsNumber) && sizeAsNumber >= 0 ) {
         size = sizeAsNumber
+    }
+    else if(sizeAsNumber === -1){
+        isUnlimited = true
+        size = -1
     }
 
     let query=""
@@ -242,44 +248,38 @@ const getAll = (req, res) => {
         ]
     }
 
-   /* if(modelName === "CarImage") {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Car,
-                as: 'cars'
-            }
-        ]
-    }*/
-
     if(query!=""){
         queryOptions.where = {
-            name: { //name = propriété du model
-                [Op.like]: `%${query}%` //query = critere de recherche 
+            name: { //name = model property
+                [Op.like]: `%${query}%` //query = Search criteria
             }
         }
     }
     queryOptions.order = [
         ['id', 'DESC']
     ]
-    queryOptions.limit = size
-    queryOptions.offset = page*size,
+    if(!isUnlimited){
+        queryOptions.limit = size
+        queryOptions.offset = page*size
+    }
+    queryOptions.distinct= true // for the good count
    
     Model.findAndCountAll(queryOptions)
         .then(items => {
             const status = 200
             const isSuccess = true
-            const message = 'La liste a bien été récupérée.'
+            const message = 'The list has been retrieved.'
             const total = items.count
-            const totalByPage = size
-            const totalPages = Math.ceil(items.count / size)
-            const currentPage = page + 1
-            const nextPage = currentPage + 1
-            const previousPage = null
+            const totalByPage = isUnlimited ? total : size;
+            const totalPages = isUnlimited ? 1 : Math.ceil(items.count / size)
+            const currentPage = isUnlimited ? 1 : page + 1
+            const nextPage = isUnlimited ? null : currentPage + 1
+            const previousPage = isUnlimited ? null : null
 
-            res.json({ isSuccess, status, message, query, total, totalByPage, totalPages, currentPage, nextPage, previousPage, results: items })
+            res.json({isSuccess, status, message, query, total, totalByPage, totalPages, currentPage, nextPage, previousPage, results: items })
         })
         .catch(error => {
-            const message = `La liste n'a pas pu être récupérée. Rééssayez dans quelques instants`
+            const message = `The list could not be retrieved. Try again in a few moments`
             console.error(error.message)
             res.status(500).json({message, results: error})
         })
@@ -292,7 +292,7 @@ const getById = (req, res) => {
     const modelName = modelMapping[modelNameParam] || modelNameParam;
 
     if (!sequelize.models[modelName]) {
-        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
+        const message = `Model "${modelNameParam}" does not exist.`;
         return res.status(404).json({ message });
     }
 
@@ -370,38 +370,33 @@ const getById = (req, res) => {
         ]
     }
 
-    if(modelName === "CarImage") {
-        queryOptions.include = [
-            {
-                model: sequelize.models.Car,
-                as: 'cars'
-            }
-        ]
-    }
-
     Model.findByPk(req.params.id, queryOptions)
         .then(item => {
             if(item === null) {
-                const message = `L'élément demandé n'existe pas. Rééssayez avec un autre identifiant.`
+                const message = `The requested item does not exist. Try again with another username.`
                 return res.status(404).json({message})
             }
-            const message = 'Un élément a bien été trouvé.'
+            const message = 'An item has been found.'
             res.json({ message, data: item })
         })
         .catch(error => {
-            const message = `L'élément n'a pas pu être récupéré. Rééssayez dans quelques instants`
+            const message = `The item could not be retrieved. Try again in a few moments`
             res.status(500).json({message, data: error})
         })
    
 }
 
-const createId = (req, res) => {
+const createId = async (req, res) => {
+
+    console.log({create_body: req.body})
+    console.log({create_file: req.files})
+    console.log({create_deleteFiles: req.body.deleteFiles})
 
     const modelNameParam = req.params.modelName;
     const modelName = modelMapping[modelNameParam] || modelNameParam;
 
     if (!sequelize.models[modelName]) {
-        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
+        const message = `Model "${modelNameParam}" does not exist.`;
         return res.status(404).json({ message });
     }
 
@@ -409,108 +404,134 @@ const createId = (req, res) => {
 
     const queryOptions = {};
 
-    Model.create(req.body, queryOptions)
-        .then(item => {
-            const message = `L'élément ${req.body.name} a bien été créé.`
-            res.json({ message, data: item })
-        })
-        .catch(error => {
-            if(error instanceof ValidationError) {
-                return res.status(400).json({ message: error.message, data: error });
-            }
-            if(error instanceof UniqueConstraintError) {
-                return res.status(400).json({ message: 'error.message', data: error });
-            }
-            const message = `L'élément n'a pas pu être ajouté. Rééssayez dans quelques instants`
-            res.status(500).json({message, data: error})
-        })
-}
+    try {
+        let item;
+        if(req.body.modelName){
+             item = await Model.create(JSON.parse(req.body.modelName), queryOptions);
+        }
+        else {
+             item = await Model.create(req.body, queryOptions);
+        }
+        const createdItemId = item.id;
 
-const updateId = (req, res) => {
-
-    console.log(req)
-    
-    const modelNameParam = req.params.modelName;
-    const modelName = modelMapping[modelNameParam] || modelNameParam;
-
-    if (!sequelize.models[modelName]) {
-        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
-        return res.status(404).json({ message });
-    }
-
-    const Model = sequelize.models[modelName];
-
-    const id = req.params.id
-
-    const queryOptions = {};
-
-    queryOptions.where = {
-        id: id
-    }
-
-    Model.update(req.body, queryOptions)
-        .then(_ => {
-            return  Model.findByPk(id).then(item => {
-                if(item === null){
-                    const message = `L'élément demandé n'existe pas. Rééssayez avec un autre identifiant`
-                    return res.status(404).json({message})
-                }
-
-                const message = `L'élément' ${item.name} a bien été modifié.`
-                res.json({message, data: item })
+        if(req.files){
+            req.files.map(async url => {
+                const imagePath = url.path;
+                await carImages.create({ image: imagePath, carId: createdItemId });
             })
-        })
-        .catch(error => {
-            if(error instanceof ValidationError){
-                return res.status(400).json({message: error.message, data:error})
-            }
-            if(error instanceof UniqueConstraintError){
-                return res.status(400).json({message: error.message, data:error})
-            }
-            const message = `La liste n'a pas pu être modifiée. Rééssayez dans quelques instants`
-            res.status(500).json({message, data: error})
-        })
+        }
+        if(req.body.deleteFiles) {
+            JSON.parse(req.body.deleteFiles).map(async url => {
+                const formattedUrl = url.replace(process.env.URL+ ':'+process.env.PORT+'/','')
+                await carImages.destroy({ where: { image: formattedUrl } });
+            })
+        }
+        
+        const message = `The ${req.body.name} element has been successfully created.`;
+        res.json({ message, data: item });
 
+    } 
+    catch (error) {
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            const messages = error.errors.map(e => e.message);
+            return res.status(400).json({ message: messages.join(", ") });
+        }
+        console.error('Error creating the element:', error);
+        return res.status(500).json({ message: 'An error occurred while creating the element', error });
+    }
 }
 
-const deleteById = (req, res) => {
+const updateId = async (req, res) => {
+
+    console.log({update_body: req.body})
+    console.log({update_file: req.files})
+    console.log({update_deleteFiles: req.body.deleteFiles})
 
     const modelNameParam = req.params.modelName;
     const modelName = modelMapping[modelNameParam] || modelNameParam;
 
     if (!sequelize.models[modelName]) {
-        const message = `Le modèle "${modelNameParam}" n'existe pas.`;
+        const message = `Model "${modelNameParam}" doest not exist.`;
+        return res.status(404).json({ message });
+    }
+
+    const Model = sequelize.models[modelName];
+    const id = req.params.id;
+    const queryOptions = { where: { id: id } };
+
+    try {
+        if(req.body.modelName){
+            await Model.update(req.body.modelName, queryOptions);
+       }
+       else {
+            await Model.update(req.body, queryOptions);
+       }
+        
+        const updatedItem = await Model.findByPk(id);
+
+        if (!updatedItem) {
+            const message = `The requested item with ID ${id} does not exist.`;
+            return res.status(404).json({ message });
+        }
+        if(req.files){
+            req.files.map(async url => {
+                const imagePath = url.path;
+                await carImages.create({ image: imagePath, carId: id });
+            })
+        }
+        if(req.body.deleteFiles) {
+            JSON.parse(req.body.deleteFiles).map(async url => {
+                const formattedUrl = url.replace(process.env.URL+ ':'+process.env.PORT+'/','')
+                await carImages.destroy({ where: { image: formattedUrl } });
+            })
+        }
+
+        const message = `The element ${modelName} with ID ${id} has been successfully modified.`;
+        return res.json({ message, data: updatedItem });
+    } 
+    catch (error) {
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            const messages = error.errors.map(e => e.message);
+            return res.status(400).json({ message: messages.join(", ") });
+        }
+        console.error('Error creating the element:', error);
+        return res.status(500).json({ message: 'An error occurred while creating the element', error });
+    }
+};
+
+const deleteById = async (req, res) => {
+
+    console.log({update_body: req.body})
+    console.log({update_file: req.files})
+    console.log({update_deleteFiles: req.body.deleteFiles})
+
+    const modelNameParam = req.params.modelName;
+    const id = req.params.id;
+    const modelName = modelMapping[modelNameParam] || modelNameParam;
+
+    if (!sequelize.models[modelName]) {
+        const message = `Model "${modelNameParam}" does not exist.`;
         return res.status(404).json({ message });
     }
 
     const Model = sequelize.models[modelName];
 
-    const queryOptions = {};
-   
-    Model.findByPk(req.params.id, queryOptions)
-        .then(item => {  
+    try {
+        const item = await Model.findByPk(id);
+        if (!item) {
+            const message = `The requested item does not exist. Try again with another username.`;
+            return res.status(404).json({ message });
+        }
 
-            if(item === null) {
-                const message = `L'élément demandé n'existe pas. Rééssayez avec un autre identifiant`
-                return res.status(404).json({message})
-            }    
+        await Model.destroy({ where: { id: id } });
 
-            const itemDeleted = item;  
-
-            Model.destroy({ 
-                where: { id: item.id } 
-            })
-                .then(_ => {
-                    message = `L'élément avec l'identifiant n°${item.id} a bien été supprimé.`
-                    res.json({message, data: itemDeleted })
-                })
-        })
-        .catch(error => {
-            const message = `La liste n'a pas pu être supprimée. Rééssayez dans quelques instants`
-            res.status(500).json({message, data: error})
-        })
-    
-}
+        const message = `The element with id "${id}" has been deleted.`;
+        return res.json({ message });
+    } catch (error) {
+        const message = `The deletion failed. Please try again later.`;
+        return res.status(500).json({ message, data: error });
+    }
+};
 
 const initDb = async () => {
     const _ = await sequelize.sync({ force: true })

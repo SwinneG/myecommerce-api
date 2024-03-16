@@ -20,6 +20,7 @@ app
     // .use(favicon(__dirname + '/favicon.ico'))
     .use(bodyParser.json())
     .use(cors())
+    .use('/uploads', express.static('uploads'))
 
 // Routes
 app.use('/', myRoutes)

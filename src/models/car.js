@@ -9,22 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: {
-                msg: 'Le nom est déjà pris.'
-            },
+            unique: true,
             validate: {
-                notEmpty: { msg: 'Le nom ne peut pas être vide' },
-                notNull: { msg: 'Le nom est une propriété requise' }
+                notEmpty: { msg: 'Name cannot be empty' },
+                notNull: { msg: 'Name is a required property' }
             }
         },
-        // pictures: {
-        //     type: DataTypes.TEXT,
-        //     allowNull: false,
-        //     validate: {
-        //         isUrl: { msg: 'Utilisez uniquement une URL valide pour l\'image.' },
-        //         notNull: { msg: 'L\'image est une propriété requise' }
-        //     }
-        // },
         power: {
             type: DataTypes.INTEGER,
             allowNull: false,

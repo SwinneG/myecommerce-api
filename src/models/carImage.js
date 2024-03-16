@@ -9,21 +9,13 @@ module.exports = (sequelize, DataTypes) => {
             autoIncrement: true
         },
         image: {
-            type: DataTypes.BLOB('long'),
+            type: DataTypes.STRING,
             allowNull: false,
             validate: {
-                notEmpty: { msg: 'Le nom ne peut pas être vide' },
-                notNull: { msg: 'Le nom est une propriété requise' }
+                notEmpty: { msg: 'Image path cannot be empty' },
+                notNull: { msg: 'Image path is a required property' }
             }
         },
-        //not mandatory
-        // carId: {
-        //     type: DataTypes.INTEGER,
-        //     references: {
-        //         model: 'cars', 
-        //         key: "id"
-        //     }
-        // }
     }, {
         timestamps: true,
         createdAt: 'created',
