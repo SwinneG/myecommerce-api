@@ -1,24 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
     const State =  sequelize.define('State', {
-      id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            notEmpty: { msg: 'Name cannot be empty' },
-            notNull: { msg: 'Name is a required property' }
-        }
-      },
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                notEmpty: { msg: 'Name cannot be empty' },
+                notNull: { msg: 'Name is a required property' }
+            }
+        },
     }, {
-      timestamps: true,
-      createdAt: 'created',
-      updatedAt: false,
-      tableName: 'states'
+        timestamps: true,
+        createdAt: true,
+        updatedAt: true,
+        tableName: 'states'
     })
 
     return State
