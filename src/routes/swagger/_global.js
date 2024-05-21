@@ -78,16 +78,6 @@
  *                      description: The foreign key of chassis
  *                  chassis:
  *                      $ref: '#/components/schemas/Chassis'
- *                  equipmentId:
- *                      type: integer
- *                      description: The foreign key of equipment
- *                  equipment:
- *                      $ref: '#/components/schemas/Equipment'
- *                  equipmentCategoryId:
- *                      type: integer
- *                      description: The foreign key of equipment category
- *                  equipmentCategory:
- *                      $ref: '#/components/schemas/EquipmentCategory'
  *                  userId:
  *                      type: integer
  *                      description: The foreign key of user
@@ -227,6 +217,15 @@
  *                  carId:
  *                      type: integer
  *                      description: The foreign key of car
+ *          CarEquipment:
+ *              type: object
+ *              properties:
+ *                  carId:
+ *                      type: integer
+ *                      description: car ID
+ *                  equipmentId:
+ *                      type: integer
+ *                      description: equipment ID
  */
 
 /**
@@ -258,4 +257,6 @@
  *    description: The car images requests
  *  - name: Users
  *    description: The users requests
+ *  - name: Car equipments
+ *    description: The car equipments
  */

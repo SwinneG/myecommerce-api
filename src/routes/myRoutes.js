@@ -28,8 +28,10 @@ function fileHandler(modelName) {
    
 router.get('/:modelName', /*auth,*/ sequelize.getAll);
 router.get('/:modelName/:id', /*auth,*/ sequelize.getById);
+router.get('/:modelName/:carId/:equipmentId', /*auth,*/ sequelize.getById);
 router.post('/:modelName', (req, res, next) => fileHandler(req.params.modelName)(req, res, next),/*auth,*/ sequelize.createId);
 router.put('/:modelName/:id', (req, res, next) => fileHandler(req.params.modelName)(req, res, next), /*auth,*/ sequelize.updateId);
+router.put('/:modelName/:carId/:equipmentId', (req, res, next) => fileHandler(req.params.modelName)(req, res, next), /*auth,*/ sequelize.updateId);
 router.delete('/:modelName/:id', /*auth,*/ sequelize.deleteById);
   
 module.exports = router;

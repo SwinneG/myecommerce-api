@@ -13,6 +13,7 @@ const EquipmentModel = require('../models/equipment');
 const UserModel = require('../models/user');
 const CarModel = require('../models/car');
 const CarImageModel = require('../models/carImage');
+const CarEquipmentModel = require('../models/carEquipment');
 
 const fuelMock = require('./mocks/mock-fuel');
 const extcolorMock = require('./mocks/mock-ext-color');
@@ -26,11 +27,11 @@ const equipmentCategoryMock = require('./mocks/mock-equipment-category');
 const equipmentMock = require('./mocks/mock-equipment');
 const carMock = require('./mocks/mock-car');
 const carImageMock = require('./mocks/mock-car-image');
+const carEquipmentMock = require('./mocks/mock-car-equipment');
 
 const bcrypt = require('bcrypt');
 
 require('dotenv').config({ path: `./.env.${process.env.NODE_ENV}` })
-
 
 let sequelize;
 if(process.env.NODE_ENV === 'dev'){
@@ -49,7 +50,6 @@ else {
         dialect: 'mysql',
         logging: console.log,
     })
-
 }
 
 const fuels = FuelModel(sequelize, DataTypes);
@@ -65,6 +65,7 @@ const equipments = EquipmentModel(sequelize, DataTypes);
 const users = UserModel(sequelize, DataTypes);
 const cars = CarModel(sequelize, DataTypes);
 const carImages = CarImageModel(sequelize, DataTypes);
+const carEquipments = CarEquipmentModel(sequelize, DataTypes);
 
 sequelize.models.Fuel = fuels;
 sequelize.models.Extcolor = extcolors;
@@ -79,6 +80,7 @@ sequelize.models.Equipment = equipments;
 sequelize.models.User = users;
 sequelize.models.Car = cars;
 sequelize.models.CarImage = carImages;
+sequelize.models.CarEquipment = carEquipments;
 
 // Mapping from URL parameters to Sequelize model names
 const modelMapping = {
@@ -95,6 +97,7 @@ const modelMapping = {
     equipmentCategories: 'EquipmentCategory',
     users: 'User',
     carImages: 'CarImage',
+    carEquipments: 'CarEquipment',
 };
 
 //ASSOCIATIONS
@@ -122,23 +125,30 @@ cars.belongsTo(states, {foreignKey: 'stateId', as: "state"});
 chassis.hasMany(cars, {foreignKey: 'chassisId', as: 'cars'});
 cars.belongsTo(chassis, {foreignKey: 'chassisId', as: "chassis"});
 
-equipments.hasMany(cars, {foreignKey: 'equipmentId', as: 'cars'});
-cars.belongsTo(equipments, {foreignKey: 'equipmentId', as: "equipment"});
-
-equipmentCategories.hasMany(cars, {foreignKey: 'equipmentCategoryId', as: 'cars'});
-cars.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategory"});
-
 users.hasMany(cars, {foreignKey: 'userId', as: 'cars'});
 cars.belongsTo(users, {foreignKey: 'userId', as: "user"});
 
 brands.hasMany(models, {foreignKey: 'brandId', as: 'model'});
 models.belongsTo(brands, {foreignKey: 'brandId', as: "brand"});
 
-equipmentCategories.hasMany(equipments, {foreignKey: 'equipmentCategoryId', as: 'equipment'});
+equipmentCategories.hasMany(equipments, {foreignKey: 'equipmentCategoryId', as: 'equipments'});
 equipments.belongsTo(equipmentCategories, {foreignKey: 'equipmentCategoryId', as: "equipmentCategory"});
 
 cars.hasMany(carImages, {foreignKey:'carId', as:'carImages'});
 carImages.belongsTo(cars, {foreignKey:'carId', as:'cars'})
+
+equipments.belongsToMany(cars, {
+    through: 'carequipments',
+    foreignKey: 'equipmentId',
+    otherKey: 'carId',
+    as: 'cars',
+});
+cars.belongsToMany(equipments, {
+    through: 'carequipments',
+    foreignKey: 'carId',
+    otherKey: 'equipmentId',
+    as: 'equipments',
+});
 
 //CONTROLLERS
 const getAll = (req, res) => {
@@ -212,21 +222,28 @@ const getAll = (req, res) => {
                 as: 'chassis'
             },
             {
-                model: sequelize.models.Equipment,
-                as: 'equipment'
-            },
-            {
-                model: sequelize.models.EquipmentCategory,
-                as: 'equipmentCategory'
-            },
-            {
                 model: sequelize.models.User,
                 as: 'user'
             },
             {
                 model: sequelize.models.CarImage,
                 as: 'carImages'
-            }
+            },
+            {
+                model: sequelize.models.Equipment,
+                as: 'equipments',
+                through: {
+                    model: sequelize.models.CarEquipment, 
+                    attributes: []
+                },
+                include: [
+                    {
+                      model: sequelize.models.EquipmentCategory,
+                      as: 'equipmentCategory'
+                    }
+                ]
+            },
+           
         ];
     }
 
@@ -244,8 +261,28 @@ const getAll = (req, res) => {
             {
                 model: sequelize.models.EquipmentCategory,
                 as: 'equipmentCategory'
-            }
+            },
+            {
+                model: sequelize.models.Car,
+                as: 'cars',
+                through: {
+                    model: sequelize.models.CarEquipment, 
+                    attributes: []
+                }
+            },
         ]
+    }
+
+    if(modelName === "CarEquipment") {
+        queryOptions.order = [
+            ['carId', 'DESC'],
+            ['equipmentId', 'DESC']
+        ];
+    }
+    else {
+        queryOptions.order = [
+            ['id', 'DESC']
+        ];
     }
 
     if(query!=""){
@@ -255,17 +292,16 @@ const getAll = (req, res) => {
             }
         }
     }
-    queryOptions.order = [
-        ['id', 'DESC']
-    ]
+  
     if(!isUnlimited){
         queryOptions.limit = size
         queryOptions.offset = page*size
     }
-    queryOptions.distinct= true // for the good count
+    queryOptions.distinct = true // for the good count
    
     Model.findAndCountAll(queryOptions)
         .then(items => {
+            console.log(items)
             const status = 200
             const isSuccess = true
             const message = 'The list has been retrieved.'
@@ -334,21 +370,27 @@ const getById = (req, res) => {
                 as: 'chassis'
             },
             {
-                model: sequelize.models.Equipment,
-                as: 'equipment'
-            },
-            {
-                model: sequelize.models.EquipmentCategory,
-                as: 'equipmentCategory'
-            },
-            {
                 model: sequelize.models.User,
                 as: 'user'
             },
             {
                 model: sequelize.models.CarImage,
                 as: 'carImages'
-            }
+            },
+            {
+                model: sequelize.models.Equipment,
+                as: 'equipments',
+                through: {
+                    model: sequelize.models.CarEquipment, 
+                    attributes: []
+                },
+                include: [
+                    {
+                      model: sequelize.models.EquipmentCategory,
+                      as: 'equipmentCategory'
+                    }
+                  ]
+            },
         ];
     }
 
@@ -370,7 +412,20 @@ const getById = (req, res) => {
         ]
     }
 
-    Model.findByPk(req.params.id, queryOptions)
+    if(modelName === "CarEquipment") {
+        let carId = req.params.carId;
+        let equipmentId = req.params.equipmentId;
+
+        if (!carId || !equipmentId) {
+            return res.status(400).json({ message: 'Both carId and equipmentId are required' });
+        }
+
+        Model.findOne({
+            where: {
+                carId: carId,
+                equipmentId: equipmentId
+            }
+        } )
         .then(item => {
             if(item === null) {
                 const message = `The requested item does not exist. Try again with another username.`
@@ -383,6 +438,23 @@ const getById = (req, res) => {
             const message = `The item could not be retrieved. Try again in a few moments`
             res.status(500).json({message, data: error})
         })
+    }
+    else {
+        let id = req.params.id;
+        Model.findByPk(id, queryOptions)
+        .then(item => {
+            if(item === null) {
+                const message = `The requested item does not exist. Try again with another username.`
+                return res.status(404).json({message})
+            }
+            const message = 'An item has been found.'
+            res.json({ message, data: item })
+        })
+        .catch(error => {
+            const message = `The item could not be retrieved. Try again in a few moments`
+            res.status(500).json({message, data: error})
+        })
+    }
    
 }
 
@@ -407,10 +479,10 @@ const createId = async (req, res) => {
     try {
         let item;
         if(req.body.modelName){
-             item = await Model.create(JSON.parse(req.body.modelName), queryOptions);
+            item = await Model.create(JSON.parse(req.body.modelName), queryOptions);
         }
         else {
-             item = await Model.create(req.body, queryOptions);
+            item = await Model.create(req.body, queryOptions);
         }
         const createdItemId = item.id;
 
@@ -456,48 +528,97 @@ const updateId = async (req, res) => {
     }
 
     const Model = sequelize.models[modelName];
-    const id = req.params.id;
-    const queryOptions = { where: { id: id } };
+    
 
-    try {
-        if(req.body.modelName){
-            await Model.update(req.body.modelName, queryOptions);
-       }
-       else {
-            await Model.update(req.body, queryOptions);
-       }
+    let queryOptions;
+
+    if(modelName === "CarEquipment") {
+        const carId = req.params.carId;
+        const equipmentId = req.params.equipmentId;
         
-        const updatedItem = await Model.findByPk(id);
-
-        if (!updatedItem) {
-            const message = `The requested item with ID ${id} does not exist.`;
-            return res.status(404).json({ message });
-        }
-        if(req.files){
-            req.files.map(async url => {
-                const imagePath = url.path;
-                await carImages.create({ image: imagePath, carId: id });
-            })
-        }
-        if(req.body.deleteFiles) {
-            JSON.parse(req.body.deleteFiles).map(async url => {
-                const formattedUrl = url.replace(process.env.URL+ ':'+process.env.PORT+'/','')
-                await carImages.destroy({ where: { image: formattedUrl } });
-            })
+        if (!carId || !equipmentId) {
+            const message = `Both carId and equipmentId are required for updating CarEquipment.`;
+            return res.status(400).json({ message });
         }
 
-        const message = `The element ${modelName} with ID ${id} has been successfully modified.`;
-        return res.json({ message, data: updatedItem });
-    } 
-    catch (error) {
-        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-            const messages = error.errors.map(e => e.message);
-            return res.status(400).json({ message: messages.join(", ") });
+        queryOptions = { where: { carId: carId, equipmentId: equipmentId } };
+
+        try {
+          
+           const existingItem = await Model.findOne(queryOptions);
+           if (!existingItem) {
+               const message = `The requested item with carId ${carId} and equipmentId ${equipmentId} does not exist.`;
+               return res.status(404).json({ message });
+           }
+            
+           if(req.body.modelName){
+                await Model.update(req.body.modelName, queryOptions);
+            }
+            else {
+                    await Model.update(req.body, queryOptions);
+            }
+
+            const updatedItem = await Model.findOne(queryOptions);
+    
+            const message = `The element ${modelName} with carId ${carId} and equipmentId ${equipmentId} has been successfully modified.`;
+            return res.json({ message, data: updatedItem });
+        } 
+        catch (error) {
+            if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+                const messages = error.errors.map(e => e.message);
+                return res.status(400).json({ message: messages.join(", ") });
+            }
+            console.error('Error creating the element:', error);
+            return res.status(500).json({ message: 'An error occurred while creating the element', error });
         }
-        console.error('Error creating the element:', error);
-        return res.status(500).json({ message: 'An error occurred while creating the element', error });
     }
-};
+    else {
+        const id = req.params.id;
+        queryOptions = { where: { id: id } };
+
+        try {
+            if(req.body.modelName){
+                await Model.update(req.body.modelName, queryOptions);
+           }
+           else {
+                await Model.update(req.body, queryOptions);
+           }
+            
+            const updatedItem = await Model.findByPk(id);
+    
+            if (!updatedItem) {
+                const message = `The requested item with ID ${id} does not exist.`;
+                return res.status(404).json({ message });
+            }
+            if(req.files){
+                req.files.map(async url => {
+                    const imagePath = url.path;
+                    await carImages.create({ image: imagePath, carId: id });
+                })
+            }
+            if(req.body.deleteFiles) {
+                JSON.parse(req.body.deleteFiles).map(async url => {
+                    const formattedUrl = url.replace(process.env.URL+ ':'+process.env.PORT+'/','')
+                    await carImages.destroy({ where: { image: formattedUrl } });
+                })
+            }
+    
+            const message = `The element ${modelName} with ID ${id} has been successfully modified.`;
+            return res.json({ message, data: updatedItem });
+        } 
+        catch (error) {
+            if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+                const messages = error.errors.map(e => e.message);
+                return res.status(400).json({ message: messages.join(", ") });
+            }
+            console.error('Error creating the element:', error);
+            return res.status(500).json({ message: 'An error occurred while creating the element', error });
+        }
+    };
+    }
+    
+
+   
 
 const deleteById = async (req, res) => {
 
@@ -561,18 +682,23 @@ const initDb = async () => {
         })
     })
 
-    brandMock.map(brand => {
-        brands.create({
+    const brandPromises = brandMock.map(brand => {
+        return brands.create({
             name: brand.name
         })
     })
+    const createdBrands = await Promise.all(brandPromises)
 
-    modelMock.map(model => {
-        models.create({
-            name: model.name,
-            brandId: model.brandId
+    for (const brand of createdBrands) {
+
+        const modelPromises = modelMock.filter(ci => ci.brandId === brand.id).map(model => {
+            return models.create({
+                name: model.name,
+                brandId: brand.id
+            })
         })
-    })
+        await Promise.all(modelPromises);
+    }
 
     stateMock.map(state => {
         states.create({
@@ -586,18 +712,22 @@ const initDb = async () => {
         })
     })
 
-    equipmentCategoryMock.map(category => {
-        equipmentCategories.create({
+    const equipmentCategoriesPromises = equipmentCategoryMock.map(category => {
+        return equipmentCategories.create({
             name: category.name
         })
     })
+    const createEquipmentCategories = await Promise.all(equipmentCategoriesPromises)
 
-    equipmentMock.map(equipment => {
-        equipments.create({
-            name: equipment.name,
-            equipmentCategoryId: equipment.equipmentCategoryId
+    for (const eqCat of createEquipmentCategories) {
+        const equipmentPromises = equipmentMock.filter(ci => ci.equipmentCategoryId === eqCat.id).map(equipment => {
+            return equipments.create({
+                name: equipment.name,
+                equipmentCategoryId: eqCat.id
+            })
         })
-    })
+        await Promise.all(equipmentPromises);
+    }
 
     const adminPwd = await bcrypt.hash('root', 10)
     const editorPwd = await bcrypt.hash('jaja', 10)
@@ -615,10 +745,9 @@ const initDb = async () => {
     })
 
 
-    carMock.map(async car => {
-        await cars.create({
+    const carPromises = carMock.map(car => {
+        return cars.create({
             name: car.name,
-            //pictures: car.pictures,
             power: car.power,
             nb_horses: car.nb_horses,
             nb_kms: car.nb_kms,
@@ -636,20 +765,31 @@ const initDb = async () => {
             modelId: car.modelId,
             stateId: car.stateId,
             chassisId: car.chassisId,
-            equipmentId: car.equipmentId,
-            equipmentCategoryId: car.equipmentCategoryId,
             userId: car.userId,
         })
-        .then(car => console.log(JSON.stringify(car)))
     })
+
+    const createdCars = await Promise.all(carPromises)
     
-    carImageMock.map(carImage => {
-        carImages.create({
-            image: carImage.image,
-            carId: carImage.carId
-        })
-    })
-    
+    for (const car of createdCars) {
+        
+        const imagePromises = carImageMock.filter(ci => ci.carId === car.id).map(carImage => {
+            return carImages.create({
+                image: carImage.image,
+                carId: car.id
+            });
+        });
+
+        const carEquipmentPromises = carEquipmentMock.filter(ce => ce.carId === car.id).map(careq => {
+            return carEquipments.create({
+                carId: car.id, 
+                equipmentId: careq.equipmentId
+            }, { fields: ['carId', 'equipmentId'] });
+        });
+
+        await Promise.all([...imagePromises, ...carEquipmentPromises]);
+    }
+     
 
     console.log('La base de donnée a bien été initialisée !')
 }
